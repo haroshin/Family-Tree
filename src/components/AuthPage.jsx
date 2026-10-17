@@ -17,7 +17,7 @@ import {
   AlertCircle,
   Users
 } from 'lucide-react';
-import { loginUser, registerUser, getStoredUsers, DEFAULT_DEMO_USER, loginOrRegisterWithGoogle } from '../utils/authUtils';
+import { loginUser, registerUser, getStoredUsers, loginOrRegisterWithGoogle } from '../utils/authUtils';
 import { AVATAR_PRESETS } from '../data/avatars';
 import GoogleOAuthButton from './GoogleOAuthButton';
 
@@ -88,18 +88,6 @@ export default function AuthPage({ onLoginSuccess }) {
       setError(err.message || 'Registration failed.');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleQuickDemoLogin = async () => {
-    setError('');
-    try {
-      const user = await loginUser(DEFAULT_DEMO_USER.email, DEFAULT_DEMO_USER.password);
-      onLoginSuccess(user);
-    } catch (err) {
-      // If demo user was altered, register/reset demo
-      const user = DEFAULT_DEMO_USER;
-      onLoginSuccess(user);
     }
   };
 
@@ -489,48 +477,8 @@ export default function AuthPage({ onLoginSuccess }) {
 
           </div>
 
-          {/* Right Column: Quick Demo & Saved Profiles (5 cols) */}
+          {/* Right Column: Saved Profiles & Info (5 cols) */}
           <div className="lg:col-span-5 space-y-5">
-            
-            {/* Quick Demo Access Card */}
-            <div className="bg-[#24160a]/90 border-2 border-amber-700/60 rounded-3xl p-5 shadow-xl relative overflow-hidden group hover:border-amber-600 transition-all">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 rounded-bl-full pointer-events-none" />
-              
-              <div className="flex items-center gap-2.5 mb-2.5">
-                <div className="w-8 h-8 rounded-lg bg-amber-800/80 border border-amber-600 flex items-center justify-center text-amber-300">
-                  <Sparkles className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="font-serif-vintage font-bold text-sm text-amber-200">
-                    Instant Demo Tree
-                  </h3>
-                  <p className="text-[10px] text-amber-400/70 font-serif-vintage">
-                    Preview complete 4-generation system
-                  </p>
-                </div>
-              </div>
-
-              <p className="text-xs text-amber-300/80 font-serif-vintage leading-relaxed mb-3.5">
-                Explore a rich pre-built tree featuring 4 generations, both parents, siblings, marriage links, and vintage oak visualization.
-              </p>
-
-              <button
-                type="button"
-                onClick={handleQuickDemoLogin}
-                className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-800 to-amber-950 hover:from-amber-700 hover:to-amber-900 border border-amber-600 text-amber-200 text-xs font-serif-vintage font-bold flex items-center justify-between shadow-md transition-all group-hover:scale-[1.01]"
-              >
-                <div className="flex items-center gap-2">
-                  <img
-                    src={DEFAULT_DEMO_USER.photo}
-                    alt="Alex Morgan"
-                    className="w-5 h-5 rounded-full object-cover border border-amber-400"
-                  />
-                  <span>Login as Alex Morgan</span>
-                </div>
-                <ArrowRight className="w-3.5 h-3.5 text-amber-400 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-
             {/* Saved Accounts on this Browser */}
             {storedUsers && storedUsers.length > 0 && (
               <div className="bg-[#1c1107]/90 border border-[#523317] rounded-3xl p-5 shadow-lg">
