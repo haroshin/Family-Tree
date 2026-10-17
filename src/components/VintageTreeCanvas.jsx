@@ -485,8 +485,8 @@ export default function VintageTreeCanvas({
                           {/* Arch connecting both parents */}
                           <path
                             d={`M${fNode.x},${fNode.y + 35} Q${parentMidX},${parentMidY + 50} ${mNode.x},${mNode.y + 35}`}
-                            stroke="#10b981"
-                            strokeWidth={isRelevant ? "2.5" : "1"}
+                            stroke="#d4af37"
+                            strokeWidth={isRelevant ? "2.5" : "1.5"}
                             strokeDasharray="4 2"
                             fill="none"
                           />
@@ -496,8 +496,8 @@ export default function VintageTreeCanvas({
                             y1={parentMidY + 42}
                             x2={n.x}
                             y2={n.y - 35}
-                            stroke="#10b981"
-                            strokeWidth={isRelevant ? "2.5" : "1"}
+                            stroke="#d4af37"
+                            strokeWidth={isRelevant ? "2.5" : "1.5"}
                           />
                         </g>
                       );

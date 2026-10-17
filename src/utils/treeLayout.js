@@ -347,6 +347,41 @@ export function computeTreeLayout(members, { showGhosts = true } = {}) {
     .filter((id) => anchor.get(id) != null)
     .map((id) => ({ from: anchor.get(id), to: id, type: typeOf(id, anchor.get(id)), weight: weight.get(id) }));
 
+  // Ensure that every person who has BOTH parents present in the tree has branches from BOTH parents
+  const existingLinkPairs = new Set(links.map((l) => `${l.from}:${l.to}`));
+  const hasLinkBetween = (id1, id2) => existingLinkPairs.has(`${id1}:${id2}`) || existingLinkPairs.has(`${id2}:${id1}`);
+
+  nodes.forEach((n) => {
+    if (n.ghost || !n.member) return;
+    const m = n.member;
+    const fId = m.fatherId;
+    const mId = m.motherId;
+    if (fId && mId && byId.has(fId) && byId.has(mId)) {
+      const fLinked = hasLinkBetween(fId, n.id);
+      const mLinked = hasLinkBetween(mId, n.id);
+
+      if (fLinked && !mLinked) {
+        const existing = links.find((l) => (l.from === fId && l.to === n.id) || (l.from === n.id && l.to === fId));
+        const isFromParent = existing ? existing.from === fId : true;
+        const from = isFromParent ? mId : n.id;
+        const to = isFromParent ? n.id : mId;
+        const t = isFromParent ? typeOf(n.id, mId) : typeOf(mId, n.id);
+        const w = Math.max(1, (weight.get(n.id) || 1) * 0.8);
+        links.push({ from, to, type: t, weight: w });
+        existingLinkPairs.add(`${from}:${to}`);
+      } else if (mLinked && !fLinked) {
+        const existing = links.find((l) => (l.from === mId && l.to === n.id) || (l.from === n.id && l.to === mId));
+        const isFromParent = existing ? existing.from === mId : true;
+        const from = isFromParent ? fId : n.id;
+        const to = isFromParent ? n.id : fId;
+        const t = isFromParent ? typeOf(n.id, fId) : typeOf(fId, n.id);
+        const w = Math.max(1, (weight.get(n.id) || 1) * 0.8);
+        links.push({ from, to, type: t, weight: w });
+        existingLinkPairs.add(`${from}:${to}`);
+      }
+    }
+  });
+
   const rowGens = [...new Set(raw.map((n) => n.gen))].sort((a, b) => b - a);
   const rows = rowGens.map((g) => ({ gen: g, d: g - rootGen, y: yOf(g) + oy, label: generationLabel(g - rootGen) }));
 
@@ -500,7 +535,7 @@ export function buildTreeArt(L) {
     const a = byId.get(lk.from);
     const n = byId.get(lk.to);
     if (!a || !n) return;
-    const r = rng(hashStr('branch:' + lk.to));
+    const r = rng(hashStr('branch:' + lk.from + ':' + lk.to));
 
     if (lk.type === 'up') {
       const dx = n.x - a.x;
