@@ -3,12 +3,23 @@ import { getGoogleClientId, parseJwt, triggerGoogleOAuthPopup } from '../utils/g
 import GoogleOAuthSetupModal from './GoogleOAuthSetupModal';
 import { Settings, ShieldCheck, AlertCircle } from 'lucide-react';
 
-export default function GoogleOAuthButton({ onSuccess, onError }) {
+function GoogleOAuthButton({ onSuccess, onError }) {
   const [clientId, setClientId] = useState(getGoogleClientId());
   const [isSetupOpen, setIsSetupOpen] = useState(false);
   const [authLoading, setAuthLoading] = useState(false);
   const [localError, setLocalError] = useState('');
   const googleBtnContainerRef = useRef(null);
+  const onSuccessRef = useRef(onSuccess);
+  const onErrorRef = useRef(onError);
+
+  // Keep callback refs fresh without triggering re-renders
+  useEffect(() => {
+    onSuccessRef.current = onSuccess;
+  }, [onSuccess]);
+
+  useEffect(() => {
+    onErrorRef.current = onError;
+  }, [onError]);
 
   // Sync client ID from storage or env
   useEffect(() => {
@@ -30,7 +41,7 @@ export default function GoogleOAuthButton({ onSuccess, onError }) {
               setAuthLoading(false);
               const profile = parseJwt(response.credential);
               if (profile && profile.email) {
-                onSuccess?.({
+                onSuccessRef.current?.({
                   name: profile.name,
                   email: profile.email,
                   photo: profile.picture,
@@ -39,23 +50,26 @@ export default function GoogleOAuthButton({ onSuccess, onError }) {
               } else {
                 const err = 'Failed to extract user profile from Google credential.';
                 setLocalError(err);
-                onError?.(err);
+                onErrorRef.current?.(err);
               }
             },
             auto_select: false,
             context: 'signin'
           });
 
-          googleBtnContainerRef.current.innerHTML = '';
-          window.google.accounts.id.renderButton(googleBtnContainerRef.current, {
-            type: 'standard',
-            theme: 'filled_black',
-            size: 'large',
-            text: 'continue_with',
-            shape: 'rectangular',
-            logo_alignment: 'left',
-            width: 320
-          });
+          // Only render if container is empty to avoid flickering
+          if (googleBtnContainerRef.current) {
+            googleBtnContainerRef.current.innerHTML = '';
+            window.google.accounts.id.renderButton(googleBtnContainerRef.current, {
+              type: 'standard',
+              theme: 'filled_black',
+              size: 'large',
+              text: 'continue_with',
+              shape: 'rectangular',
+              logo_alignment: 'left',
+              width: 320
+            });
+          }
           return true;
         } catch (e) {
           console.error('Error rendering official Google button', e);
@@ -73,7 +87,7 @@ export default function GoogleOAuthButton({ onSuccess, onError }) {
     return () => {
       if (checkInterval) clearInterval(checkInterval);
     };
-  }, [clientId, onSuccess, onError]);
+  }, [clientId]);
 
   const handleCustomButtonClick = () => {
     setLocalError('');
@@ -88,12 +102,12 @@ export default function GoogleOAuthButton({ onSuccess, onError }) {
       clientId,
       onSuccess: (profile) => {
         setAuthLoading(false);
-        onSuccess?.(profile);
+        onSuccessRef.current?.(profile);
       },
       onError: (err) => {
         setAuthLoading(false);
         setLocalError(err);
-        onError?.(err);
+        onErrorRef.current?.(err);
       }
     });
   };
@@ -176,3 +190,5 @@ export default function GoogleOAuthButton({ onSuccess, onError }) {
     </div>
   );
 }
+
+export default React.memo(GoogleOAuthButton);

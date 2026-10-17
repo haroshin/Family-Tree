@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { 
   Trees, 
   Lock, 
@@ -90,6 +90,24 @@ export default function AuthPage({ onLoginSuccess }) {
       setLoading(false);
     }
   };
+
+  const handleGoogleSuccess = useCallback(async (profile) => {
+    try {
+      const user = await loginOrRegisterWithGoogle({
+        name: profile.name,
+        email: profile.email,
+        photo: profile.photo,
+        googleId: profile.googleId
+      });
+      onLoginSuccess(user);
+    } catch (err) {
+      setError(err.message || 'Google authentication failed.');
+    }
+  }, [onLoginSuccess]);
+
+  const handleGoogleError = useCallback((err) => {
+    setError(err || 'Failed to authenticate with Google.');
+  }, []);
 
   const handleQuickSwitchUser = async (user) => {
     if (user.authProvider === 'google') {
@@ -215,22 +233,8 @@ export default function AuthPage({ onLoginSuccess }) {
             {/* Authentic Google OAuth Action */}
             <div className="mb-5">
               <GoogleOAuthButton
-                onSuccess={async (profile) => {
-                  try {
-                    const user = await loginOrRegisterWithGoogle({
-                      name: profile.name,
-                      email: profile.email,
-                      photo: profile.photo,
-                      googleId: profile.googleId
-                    });
-                    onLoginSuccess(user);
-                  } catch (err) {
-                    setError(err.message || 'Google authentication failed.');
-                  }
-                }}
-                onError={(err) => {
-                  setError(err || 'Failed to authenticate with Google.');
-                }}
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
               />
 
               <div className="flex items-center my-4">
