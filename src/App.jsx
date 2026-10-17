@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import confetti from 'canvas-confetti';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 
 import Navbar from './components/Navbar';
 import AuthPage from './components/AuthPage';
@@ -374,17 +374,17 @@ export default function App() {
         isTransformAdjusted = true;
       }
 
-      const canvas = await html2canvas(canvasEl, {
+      // Brief pause to allow reflow after clearing transform
+      await new Promise((resolve) => setTimeout(resolve, 50));
+
+      const dataUrl = await toPng(canvasEl, {
         backgroundColor: '#070d09',
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
+        pixelRatio: 2,
+        cacheBust: true,
       });
 
-      const image = canvas.toDataURL('image/png');
       const link = document.createElement('a');
-      link.href = image;
+      link.href = dataUrl;
       const safeTreeName = (currentUser?.treeName || 'family_tree').toLowerCase().replace(/[^a-z0-9]/g, '_');
       link.download = `${safeTreeName}_${new Date().toISOString().slice(0, 10)}.png`;
       link.click();
