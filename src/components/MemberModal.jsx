@@ -358,18 +358,18 @@ export default function MemberModal({
                   <span className="text-[11px] text-emerald-300/70 font-serif">Link parents, spouse, or siblings</span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
                   {/* Select Father */}
-                  <div>
-                    <label className="block text-[11px] font-serif font-semibold text-amber-300 mb-1">
+                  <div className="flex flex-col justify-end">
+                    <label className="block text-xs font-serif font-semibold text-amber-300 mb-1.5 truncate">
                       Father
                     </label>
                     <select
                       value={formData.fatherId || ''}
                       onChange={(e) => setFormData({ ...formData, fatherId: e.target.value })}
-                      className="w-full bg-[#050b07] border border-[#274833] rounded-xl px-2.5 py-1.5 text-xs text-amber-100 focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
+                      className="w-full bg-[#050b07] border border-[#274833] rounded-xl px-2.5 py-2 text-xs text-amber-100 focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
                     >
-                      <option value="">-- No Father Listed --</option>
+                      <option value="">-- None --</option>
                       {(members || []).filter(m => m.id !== initialMember?.id && m.gender !== 'female').map(m => (
                         <option key={m.id} value={m.id}>
                           {m.name} {m.id === 'me' ? '(Me)' : ''}
@@ -379,16 +379,16 @@ export default function MemberModal({
                   </div>
 
                   {/* Select Mother */}
-                  <div>
-                    <label className="block text-[11px] font-serif font-semibold text-emerald-300 mb-1">
+                  <div className="flex flex-col justify-end">
+                    <label className="block text-xs font-serif font-semibold text-emerald-300 mb-1.5 truncate">
                       Mother
                     </label>
                     <select
                       value={formData.motherId || ''}
                       onChange={(e) => setFormData({ ...formData, motherId: e.target.value })}
-                      className="w-full bg-[#050b07] border border-[#274833] rounded-xl px-2.5 py-1.5 text-xs text-emerald-100 focus:outline-none focus:ring-1 focus:ring-emerald-400"
+                      className="w-full bg-[#050b07] border border-[#274833] rounded-xl px-2.5 py-2 text-xs text-emerald-100 focus:outline-none focus:ring-1 focus:ring-emerald-400"
                     >
-                      <option value="">-- No Mother Listed --</option>
+                      <option value="">-- None --</option>
                       {(members || []).filter(m => m.id !== initialMember?.id && m.gender !== 'male').map(m => (
                         <option key={m.id} value={m.id}>
                           {m.name} {m.id === 'me' ? '(Me)' : ''}
@@ -398,16 +398,16 @@ export default function MemberModal({
                   </div>
 
                   {/* Select Spouse */}
-                  <div>
-                    <label className="block text-[11px] font-serif font-semibold text-amber-300 mb-1">
-                      Spouse (Husband / Wife)
+                  <div className="flex flex-col justify-end">
+                    <label className="block text-xs font-serif font-semibold text-amber-300 mb-1.5 truncate">
+                      Spouse
                     </label>
                     <select
                       value={formData.spouseId || ''}
                       onChange={(e) => setFormData({ ...formData, spouseId: e.target.value })}
-                      className="w-full bg-[#050b07] border border-[#274833] rounded-xl px-2.5 py-1.5 text-xs text-amber-100 focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
+                      className="w-full bg-[#050b07] border border-[#274833] rounded-xl px-2.5 py-2 text-xs text-amber-100 focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
                     >
-                      <option value="">-- No Spouse Listed --</option>
+                      <option value="">-- None --</option>
                       {(members || []).filter(m => m.id !== initialMember?.id).map(m => (
                         <option key={m.id} value={m.id}>
                           {m.name} {m.id === 'me' ? '(Me)' : ''}
@@ -416,10 +416,10 @@ export default function MemberModal({
                     </select>
                   </div>
 
-                  {/* Select Sibling (Brother / Sister) */}
-                  <div>
-                    <label className="block text-[11px] font-serif font-semibold text-indigo-300 mb-1">
-                      Sibling (Brother / Sister)
+                  {/* Select Sibling */}
+                  <div className="flex flex-col justify-end">
+                    <label className="block text-xs font-serif font-semibold text-indigo-300 mb-1.5 truncate">
+                      Sibling
                     </label>
                     <select
                       value={(formData.siblingIds && formData.siblingIds[0]) || ''}
@@ -430,9 +430,9 @@ export default function MemberModal({
                           siblingIds: val ? [val] : []
                         });
                       }}
-                      className="w-full bg-[#050b07] border border-[#274833] rounded-xl px-2.5 py-1.5 text-xs text-amber-100 focus:outline-none focus:ring-1 focus:ring-indigo-400"
+                      className="w-full bg-[#050b07] border border-[#274833] rounded-xl px-2.5 py-2 text-xs text-amber-100 focus:outline-none focus:ring-1 focus:ring-indigo-400"
                     >
-                      <option value="">-- No Sibling Listed --</option>
+                      <option value="">-- None --</option>
                       {(members || []).filter(m => m.id !== initialMember?.id).map(m => (
                         <option key={m.id} value={m.id}>
                           {m.gender === 'female' ? '👧' : '👦'} {m.name} {m.id === 'me' ? '(Me)' : ''}
