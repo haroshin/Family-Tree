@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { X, User, Camera, Calendar, MapPin, Briefcase, Heart, Sparkles, Plus, ImageOff } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, User, Camera, Calendar, MapPin, Briefcase, Heart, Sparkles, Plus, ImageOff, Upload, Check, Loader2 } from 'lucide-react';
 import { AVATAR_PRESETS, getDefaultAvatar } from '../data/avatars';
+import { compressImageFile } from '../utils/imageUtils';
 import Avatar from './Avatar';
 
 export default function MemberModal({
@@ -38,6 +39,27 @@ export default function MemberModal({
   });
 
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
+  const [uploadLoading, setUploadLoading] = useState(false);
+  const [uploadSuccessMsg, setUploadSuccessMsg] = useState('');
+  const fileInputRef = useRef(null);
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadLoading(true);
+    setUploadSuccessMsg('');
+    try {
+      const { dataUrl, sizeInKB } = await compressImageFile(file, { maxWidth: 240, maxHeight: 240, quality: 0.82 });
+      setFormData(prev => ({ ...prev, photo: dataUrl }));
+      setUploadSuccessMsg(`Photo added (${sizeInKB} KB)`);
+    } catch (err) {
+      alert('Could not process image: ' + (err.message || 'Unknown error'));
+    } finally {
+      setUploadLoading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
 
   useEffect(() => {
     if (initialMember) {
@@ -204,21 +226,73 @@ export default function MemberModal({
           
           {/* Avatar & Basic Info Header */}
           <div className="flex flex-col sm:flex-row items-center gap-6 p-4 rounded-2xl bg-[#07100a] border border-[#233f2c]">
-            <div className="relative group cursor-pointer" onClick={() => setShowAvatarPicker(true)}>
-              <div className="p-1 rounded-2xl bg-gradient-to-b from-[#d4af37] to-[#5a3e1b] shadow-lg">
-                <Avatar
-                  photo={formData.photo}
-                  name={formData.name}
-                  gender={formData.gender}
-                  className="w-20 h-20 rounded-xl"
-                />
-              </div>
-              <button
-                type="button"
-                className="absolute inset-0 rounded-2xl bg-black/70 opacity-0 group-hover:opacity-100 flex items-center justify-center text-[#fef08a] text-xs font-semibold transition-opacity"
+            <div className="flex flex-col items-center gap-2 shrink-0">
+              <div 
+                className="relative group cursor-pointer" 
+                onClick={() => fileInputRef.current?.click()} 
+                title="Click to upload custom photo"
               >
-                <Camera className="w-5 h-5 mb-0.5" />
-              </button>
+                <div className="p-1 rounded-2xl bg-gradient-to-b from-[#d4af37] to-[#5a3e1b] shadow-lg">
+                  <Avatar
+                    photo={formData.photo}
+                    name={formData.name}
+                    gender={formData.gender}
+                    className="w-20 h-20 rounded-xl"
+                  />
+                </div>
+                <button
+                  type="button"
+                  className="absolute inset-0 rounded-2xl bg-black/70 opacity-0 group-hover:opacity-100 flex items-center justify-center text-[#fef08a] text-xs font-semibold transition-opacity"
+                >
+                  <Camera className="w-5 h-5 mb-0.5" />
+                </button>
+              </div>
+
+              {/* Hidden file input for native camera / device image upload */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  disabled={uploadLoading}
+                  onClick={() => fileInputRef.current?.click()}
+                  className="px-2.5 py-1 rounded-lg bg-[#122619] hover:bg-[#1a3825] border border-[#d4af37]/50 text-[#fef08a] text-[11px] font-serif font-semibold flex items-center gap-1 transition-all shadow-sm"
+                  title="Upload photo from phone or computer"
+                >
+                  {uploadLoading ? (
+                    <>
+                      <Loader2 className="w-3 h-3 animate-spin text-amber-300" />
+                      <span>Compressing...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="w-3 h-3 text-emerald-400" />
+                      <span>Upload</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowAvatarPicker(prev => !prev)}
+                  className="px-2.5 py-1 rounded-lg bg-[#050b07] hover:bg-[#122618] border border-[#274833] text-amber-200/80 hover:text-amber-100 text-[11px] font-serif transition-all"
+                >
+                  Presets
+                </button>
+              </div>
+
+              {uploadSuccessMsg && (
+                <span className="text-[10px] text-emerald-400 font-serif flex items-center gap-1">
+                  <Check className="w-3 h-3 text-emerald-400" />
+                  {uploadSuccessMsg}
+                </span>
+              )}
             </div>
 
             <div className="flex-1 w-full space-y-3">
@@ -463,18 +537,39 @@ export default function MemberModal({
                 </button>
               </div>
 
-              {/* No Photo Button Option */}
-              <button
-                type="button"
-                onClick={() => {
-                  setFormData({ ...formData, photo: '' });
-                  setShowAvatarPicker(false);
-                }}
-                className="w-full py-2 px-3 rounded-xl bg-[#050b07] border border-[#274833] hover:border-[#d4af37] text-xs font-serif font-semibold text-amber-300 flex items-center justify-center gap-2 transition-all"
-              >
-                <ImageOff className="w-4 h-4 text-amber-400" />
-                🚫 Default Avatar
-              </button>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  disabled={uploadLoading}
+                  onClick={() => fileInputRef.current?.click()}
+                  className="py-2 px-3 rounded-xl bg-[#122619] border border-[#d4af37]/60 hover:bg-[#1a3825] text-xs font-serif font-semibold text-[#fef08a] flex items-center justify-center gap-2 transition-all shadow-md"
+                >
+                  {uploadLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-amber-300" />
+                      <span>Optimizing...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="w-4 h-4 text-emerald-400" />
+                      <span>Upload Photo</span>
+                    </>
+                  )}
+                </button>
+
+                {/* No Photo Button Option */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormData({ ...formData, photo: '' });
+                    setShowAvatarPicker(false);
+                  }}
+                  className="py-2 px-3 rounded-xl bg-[#050b07] border border-[#274833] hover:border-[#d4af37] text-xs font-serif font-semibold text-amber-300 flex items-center justify-center gap-2 transition-all"
+                >
+                  <ImageOff className="w-4 h-4 text-amber-400" />
+                  <span>Default Avatar</span>
+                </button>
+              </div>
 
               <div className="grid grid-cols-6 gap-2 max-h-40 overflow-y-auto pt-2 border-t border-[#223d2b]">
                 {[...AVATAR_PRESETS.male, ...AVATAR_PRESETS.female, ...AVATAR_PRESETS.neutral].map((av) => (
