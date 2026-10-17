@@ -353,11 +353,11 @@ export default function VintageTreeCanvas({
                   </linearGradient>
                 </defs>
 
-                {/* Ancient generation labels in the margin */}
+                {/* Generation labels in the margin */}
                 {layout.rows.map((row) => (
                   <g key={row.gen} opacity="0.8">
                     <text x="36" y={row.y - 6} fontFamily="'Cinzel Decorative', 'Cinzel', serif" fontSize="12" fontWeight="700" fill="#d4af37" letterSpacing="3">
-                      {row.d === 0 ? '✦ SOLE HEIR' : `✦ AETAS GEN ${Math.abs(row.d)}`}
+                      {row.d === 0 ? '✦ ROOT (ME)' : `✦ GENERATION ${Math.abs(row.d)}`}
                     </text>
                     <text x="36" y={row.y + 12} fontFamily="'Playfair Display', serif" fontStyle="italic" fontSize="13" fill="#e5c158">
                       {row.label}
@@ -628,7 +628,7 @@ export default function VintageTreeCanvas({
                           )}
                         </button>
 
-                        {/* noble name banner */}
+                        {/* member name banner */}
                         <div
                           className={`mx-auto mt-5 w-fit max-w-[150px] px-3 py-[3px] rounded-[3px] border shadow-[0_2px_8px_rgba(0,0,0,0.7)] text-[12px] leading-tight font-cinzel-dec font-bold truncate ${
                             isMe 
@@ -640,7 +640,7 @@ export default function VintageTreeCanvas({
                               : 'bg-[#102016] border-[#8a671d] text-[#fce7a1]'
                           }`}
                         >
-                          {isMe ? `⚡ ${m.name}` : m.name}
+                          {isMe ? `★ ${m.name}` : m.name}
                         </div>
                       </div>
 
@@ -680,7 +680,7 @@ export default function VintageTreeCanvas({
                           </div>
 
                           <div className="pt-2 border-t border-[#23422d]">
-                            <p className="text-[10px] font-bold uppercase tracking-wider text-[#d4af37] mb-1.5 font-cinzel-dec">✦ Weave a Bloodline</p>
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-[#d4af37] mb-1.5 font-cinzel-dec">✦ Add Relative</p>
                             <div className="grid grid-cols-2 gap-1.5">
                               {canAddFather && (
                                 <button onClick={() => addRelation(m, 'father')} className="branch-chip">
@@ -708,14 +708,14 @@ export default function VintageTreeCanvas({
 
                           <div className="mt-3 pt-2 border-t border-[#23422d] flex items-center justify-between text-xs font-serif-vintage">
                             <button onClick={() => onSelectMember(m)} className="flex items-center gap-1 text-[#d4af37] hover:text-white">
-                              <Eye className="w-3.5 h-3.5" /> Lore
+                              <Eye className="w-3.5 h-3.5" /> Profile
                             </button>
                             <button onClick={() => onEditMember(m)} className="flex items-center gap-1 text-[#d4af37] hover:text-white">
-                              <Edit3 className="w-3.5 h-3.5" /> Inscribe
+                              <Edit3 className="w-3.5 h-3.5" /> Edit
                             </button>
                             {!isMe && (
                               <button onClick={() => onDeleteMember(m.id)} className="flex items-center gap-1 text-rose-400 hover:text-rose-200">
-                                <Trash2 className="w-3.5 h-3.5" /> Burn Off
+                                <Trash2 className="w-3.5 h-3.5" /> Delete
                               </button>
                             )}
                           </div>
@@ -740,8 +740,8 @@ export default function VintageTreeCanvas({
             />
             <span className="text-xs font-serif-vintage font-bold text-amber-100 flex items-center gap-1.5">
               {sideFilter === 'mother' 
-                ? "🌸 Viewing Mother's Side (Maternal Lineage)" 
-                : "👨 Viewing Father's Side (Paternal Lineage)"}
+                ? "🌸 Viewing Mother's Side" 
+                : "👨 Viewing Father's Side"}
             </span>
           </div>
           {onResetFilter && (
@@ -749,7 +749,7 @@ export default function VintageTreeCanvas({
               onClick={onResetFilter}
               className="text-[11px] font-serif-vintage font-bold px-2.5 py-1 rounded-lg bg-amber-800 hover:bg-amber-700 text-amber-100 border border-amber-600 transition-all hover:scale-105"
             >
-              ✕ Show All Branches
+              ✕ Show All Members
             </button>
           )}
         </div>
@@ -759,7 +759,7 @@ export default function VintageTreeCanvas({
         <h2 className="font-serif-vintage text-sm font-bold tracking-widest uppercase text-amber-300 flex items-center gap-2">
           <Crown className="w-4 h-4 text-amber-400" /> Family Tree
         </h2>
-        <p className="text-[11px] text-amber-200/75 italic">Hover a leaf for details · click a dashed bud to add a parent</p>
+        <p className="text-[11px] text-amber-200/75 italic">Hover a person for details · click empty slots to add a parent</p>
       </div>
 
       <div data-ui className="absolute top-4 right-5 z-30 flex flex-col gap-1.5 bg-[#2b1c0d]/90 p-1.5 rounded-xl border-2 border-[#7a4f29] shadow-xl">

@@ -40,10 +40,10 @@ export default function DirectoryView({
           <div>
             <h2 className="text-xl font-['Cinzel_Decorative',serif] font-bold text-[#fef08a] flex items-center gap-2">
               <span className="text-xl">📜</span>
-              House Directory & Kin Index
+              Family Directory
             </h2>
             <p className="text-xs text-emerald-300/80 font-serif mt-1">
-              Search and filter all noble souls inscribed upon the lineage tapestry
+              Search and filter all members in your family tree
             </p>
           </div>
 
@@ -54,7 +54,7 @@ export default function DirectoryView({
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-emerald-500" />
               <input
                 type="text"
-                placeholder="Search name, house, realm..."
+                placeholder="Search name, relation, birthplace..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="bg-[#050b07] border border-[#274833] text-xs text-amber-100 placeholder:text-emerald-700 rounded-xl pl-9 pr-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#d4af37] focus:border-[#d4af37] w-52"
@@ -82,8 +82,8 @@ export default function DirectoryView({
               className="bg-[#050b07] border border-[#274833] text-xs text-amber-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
             >
               <option value="all">All Genders</option>
-              <option value="male">Wizards ♂</option>
-              <option value="female">Witches ♀</option>
+              <option value="male">Male ♂</option>
+              <option value="female">Female ♀</option>
               <option value="other">Other</option>
             </select>
 
@@ -112,7 +112,7 @@ export default function DirectoryView({
                   />
                   <div className="flex-1 min-w-0">
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#07100a] text-[#fef08a] border border-[#24422e]">
-                      {m.relationToMe || 'Noble Kin'}
+                      {m.relationToMe || 'Relative'}
                     </span>
                     <h3 className="font-['Cinzel',serif] font-bold text-sm text-[#fef08a] truncate mt-1 group-hover:text-amber-200 transition-colors">
                       {m.name}
@@ -146,7 +146,7 @@ export default function DirectoryView({
                   className="flex items-center gap-1 text-xs font-serif font-semibold text-[#fef08a] hover:text-white transition-colors"
                 >
                   <Eye className="w-3.5 h-3.5 text-[#d4af37]" />
-                  View Folio
+                  View Profile
                 </button>
                 <button
                   onClick={() => onEditMember(m)}

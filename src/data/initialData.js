@@ -345,6 +345,6 @@ export const JUST_ME_TEMPLATE = [
     siblingIds: [],
     generation: 0,
     location: 'Country',
-    tags: ['Progenitor']
+    tags: ['Self']
   }
 ];

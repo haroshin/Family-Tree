@@ -159,7 +159,7 @@ export default function TreeCanvas({
         <button
           onClick={handleResetView}
           className="p-2 rounded-xl hover:bg-[#122618] text-amber-200 hover:text-white transition-all"
-          title="Center on Progenitor / Reset View"
+          title="Center on Me / Reset View"
         >
           <Target className="w-5 h-5 text-emerald-400" />
         </button>
@@ -172,19 +172,19 @@ export default function TreeCanvas({
       <div className="absolute top-4 left-4 z-30 bg-[#0b160f]/90 backdrop-blur-md border border-[#d4af37]/40 px-4 py-2.5 rounded-2xl shadow-xl hidden sm:flex items-center gap-4 font-serif">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-emerald-600 ring-2 ring-emerald-400/40" />
-          <span className="text-xs text-amber-200 font-medium">Wizard ♂</span>
+          <span className="text-xs text-amber-200 font-medium">Male ♂</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-[#740001] ring-2 ring-rose-400/40" />
-          <span className="text-xs text-amber-200 font-medium">Witch ♀</span>
+          <span className="text-xs text-amber-200 font-medium">Female ♀</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-[#fef08a] ring-2 ring-[#d4af37]/60" />
-          <span className="text-xs text-[#fef08a] font-medium">Progenitor (Me)</span>
+          <span className="text-xs text-[#fef08a] font-medium">Me (Root)</span>
         </div>
         <div className="h-3 w-px bg-[#24422e]" />
         <span className="text-xs text-emerald-300/80">
-          ✨ Noble Bloodline Constellations
+          ✨ Family Tree Chart
         </span>
       </div>
 
@@ -199,11 +199,11 @@ export default function TreeCanvas({
           
           {generations.map(({ level, members: genMembers }) => {
             let genTitle = 'Generations';
-            if (level === 0) genTitle = '⭐ Generation 0 (Me & Contemporaries - Center)';
-            else if (level === 1) genTitle = '🦁🐍 Generation 1 (Parents, Aunts & Uncles)';
-            else if (level === 2) genTitle = '📜 Generation 2 (Grandparents)';
-            else if (level >= 3) genTitle = `✦ Generation ${level} (Ancient Forebears)`;
-            else if (level < 0) genTitle = `🌱 Descendants & Heirs`;
+            if (level === 0) genTitle = '⭐ Generation 0 (Me & Contemporaries)';
+            else if (level === 1) genTitle = 'Generation 1 (Parents, Aunts & Uncles)';
+            else if (level === 2) genTitle = 'Generation 2 (Grandparents)';
+            else if (level >= 3) genTitle = `✦ Generation ${level} (Ancestors)`;
+            else if (level < 0) genTitle = `🌱 Descendants & Children`;
 
             return (
               <div key={level} className="flex flex-col items-center gap-6 relative">
@@ -315,7 +315,7 @@ export default function TreeCanvas({
                               
                               {member.maidenName && (
                                 <p className="text-[11px] text-emerald-300/70 italic truncate font-serif">
-                                  House of {member.maidenName}
+                                  née {member.maidenName}
                                 </p>
                               )}
 
@@ -357,10 +357,10 @@ export default function TreeCanvas({
                                     onAddRelation(member, 'father');
                                   }}
                                   className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[#740001]/30 hover:bg-[#740001] text-[#fef08a] hover:text-white transition-all text-[11px] font-medium border border-[#d4af37]/40"
-                                  title="Add Ancestor (Father/Mother)"
+                                  title="Add Parent (Father / Mother)"
                                 >
                                   <Plus className="w-3 h-3" />
-                                  Add Sire/Dam
+                                  Add Parent
                                 </button>
                               )}
 
@@ -384,7 +384,7 @@ export default function TreeCanvas({
                                   onEditMember(member);
                                 }}
                                 className="p-1.5 rounded-lg hover:bg-[#122618] text-amber-300 hover:text-[#fef08a] transition-colors"
-                                title="Inscribe Details"
+                                title="Edit Details"
                               >
                                 <Edit3 className="w-3.5 h-3.5" />
                               </button>
@@ -396,7 +396,7 @@ export default function TreeCanvas({
                                     onDeleteMember(member.id);
                                   }}
                                   className="p-1.5 rounded-lg hover:bg-[#740001]/60 text-rose-300 hover:text-white transition-colors"
-                                  title="Expel Member"
+                                  title="Delete Member"
                                 >
                                   <Trash2 className="w-3.5 h-3.5" />
                                 </button>

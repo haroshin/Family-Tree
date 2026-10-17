@@ -18,14 +18,14 @@ export default function TimelineView({ members, onSelectMember }) {
           <div>
             <h2 className="text-xl font-['Cinzel_Decorative',serif] font-bold text-[#fef08a] flex items-center gap-2">
               <span className="text-xl">⏳</span>
-              Ancestral Lineage Chronicles
+              Family Timeline
             </h2>
             <p className="text-xs text-emerald-300/80 font-serif mt-1">
-              Chronological epochs of noble births, historical eras, and life sagas
+              Chronological order of births and life events across generations
             </p>
           </div>
           <span className="px-3.5 py-1.5 rounded-full text-xs font-serif font-semibold bg-[#07100a] text-[#fef08a] border border-[#d4af37]/40 shadow-sm">
-            {sortedMembers.length} Chronicles Inscribed
+            {sortedMembers.length} Members Listed
           </span>
         </div>
 
@@ -59,10 +59,10 @@ export default function TimelineView({ members, onSelectMember }) {
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-xs font-['Cinzel',serif] font-bold text-[#fef08a]">
-                          {m.birthYear ? `Anno ${m.birthYear}` : 'Epoch Unknown'}
+                          {m.birthYear ? `Born ${m.birthYear}` : 'Birth Year Unknown'}
                         </span>
                         <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#07100a] text-amber-200 border border-[#24422e]">
-                          {m.relationToMe || 'Noble Kin'}
+                          {m.relationToMe || 'Relative'}
                         </span>
                         {m.generation !== undefined && (
                           <span className="text-[10px] text-emerald-400/80">

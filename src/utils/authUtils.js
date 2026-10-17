@@ -159,7 +159,7 @@ export const registerUser = async ({ name, email, password, gender = 'male', bir
       gender: newUser.gender,
       photo: newUser.photo,
       birthYear: newUser.birthYear,
-      relationToMe: 'Me (Progenitor)'
+      relationToMe: 'Me'
     }
   ];
 
@@ -253,7 +253,7 @@ export const loginOrRegisterWithGoogle = async ({ name, email, photo, googleId, 
           gender: user.gender,
           photo: user.photo,
           birthYear: user.birthYear,
-          relationToMe: 'Me (Progenitor)'
+          relationToMe: 'Me'
         }
       ];
       saveUserTree(user.id, updateGenerations(personalizedTree, 'me'));

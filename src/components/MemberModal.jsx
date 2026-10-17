@@ -184,10 +184,10 @@ export default function MemberModal({
             </div>
             <div>
               <h2 className="font-['Cinzel_Decorative',serif] font-bold text-lg text-[#fef08a] tracking-wide">
-                {initialMember ? 'Edit Lineage Record' : targetMember ? `Inscribe ${relationType || 'Kin'} for ${targetMember.name}` : 'Inscribe Bloodline Member'}
+                {initialMember ? 'Edit Member Details' : targetMember ? `Add ${relationType || 'Relative'} for ${targetMember.name}` : 'Add Family Member'}
               </h2>
               <p className="text-xs text-emerald-300/80 font-serif">
-                Record ancestral lore upon the noble house tapestry
+                Add or update details for this family member
               </p>
             </div>
           </div>
@@ -230,7 +230,7 @@ export default function MemberModal({
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Sirius Orion Black"
+                    placeholder="e.g. Alexander Morgan"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full bg-[#050b07] border border-[#274833] rounded-xl px-3 py-2 text-sm text-amber-100 placeholder:text-emerald-700 focus:outline-none focus:ring-1 focus:ring-[#d4af37] focus:border-[#d4af37]"
@@ -239,11 +239,11 @@ export default function MemberModal({
 
                 <div>
                   <label className="block text-xs font-serif font-semibold text-amber-200 mb-1">
-                    Maiden / House Name (Optional)
+                    Maiden Name (Optional)
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Black, Rosier"
+                    placeholder="e.g. Vance, Smith"
                     value={formData.maidenName}
                     onChange={(e) => setFormData({ ...formData, maidenName: e.target.value })}
                     className="w-full bg-[#050b07] border border-[#274833] rounded-xl px-3 py-2 text-sm text-amber-100 placeholder:text-emerald-700 focus:outline-none focus:ring-1 focus:ring-[#d4af37] focus:border-[#d4af37]"
@@ -255,14 +255,14 @@ export default function MemberModal({
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-serif font-semibold text-amber-200 mb-1">
-                    Relationship Kinship
+                    Relationship to Me
                   </label>
                   <select
                     value={formData.relationToMe}
                     onChange={(e) => setFormData({ ...formData, relationToMe: e.target.value })}
                     className="w-full bg-[#050b07] border border-[#274833] rounded-xl px-3 py-2 text-sm text-amber-100 focus:outline-none focus:ring-1 focus:ring-[#d4af37] focus:border-[#d4af37]"
                   >
-                    <option value="Me (Root)">Me (Progenitor)</option>
+                    <option value="Me (Root)">Me (Root)</option>
                     <option value="Father">Father</option>
                     <option value="Mother">Mother</option>
                     <option value="Paternal Grandfather">Paternal Grandfather</option>
@@ -271,7 +271,7 @@ export default function MemberModal({
                     <option value="Maternal Grandmother">Maternal Grandmother</option>
                     <option value="Great-Grandfather">Great-Grandfather</option>
                     <option value="Great-Grandmother">Great-Grandmother</option>
-                    <option value="Spouse">Spouse (Betrothed)</option>
+                    <option value="Spouse">Spouse (Husband / Wife)</option>
                     <option value="Sister">Sister</option>
                     <option value="Brother">Brother</option>
                     <option value="Sibling">Sibling</option>
@@ -279,36 +279,36 @@ export default function MemberModal({
                     <option value="Aunt">Aunt</option>
                     <option value="Son">Son</option>
                     <option value="Daughter">Daughter</option>
-                    <option value="Child">Child (Offspring)</option>
-                    <option value="Relative">Noble Kin</option>
+                    <option value="Child">Child (Son / Daughter)</option>
+                    <option value="Relative">Relative</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-xs font-serif font-semibold text-[#fef08a] mb-1">
-                    🌳 Lineage Generation
+                    🌳 Generation
                   </label>
                   <select
                     value={formData.generation ?? 0}
                     onChange={(e) => setFormData({ ...formData, generation: parseInt(e.target.value) })}
                     className="w-full bg-[#050b07] border border-[#d4af37]/60 rounded-xl px-3 py-2 text-sm text-[#fef08a] focus:outline-none focus:ring-1 focus:ring-[#d4af37] font-bold"
                   >
-                    <option value="0">Gen 0 (Me & Contemporaries - Center)</option>
+                    <option value="0">Gen 0 (Me / My Generation)</option>
                     <option value="1">Gen 1 (Parents, Aunts, Uncles)</option>
                     <option value="2">Gen 2 (Grandparents)</option>
                     <option value="3">Gen 3 (Great-Grandparents)</option>
                     <option value="4">Gen 4 (Great-Great-Grandparents)</option>
-                    <option value="5">Gen 5 (Ancient Ancestors)</option>
-                    <option value="-1">Gen -1 (Descendants / Children)</option>
+                    <option value="5">Gen 5 (Ancestors)</option>
+                    <option value="-1">Gen -1 (Children)</option>
                     <option value="-2">Gen -2 (Grandchildren)</option>
                   </select>
                 </div>
               </div>
 
-              {/* Family Lineage Side Selector (Hogwarts House Theme) */}
+              {/* Family Lineage Side Selector */}
               <div>
                 <label className="block text-xs font-serif font-semibold text-amber-200 mb-1.5">
-                  🏰 House Lineage Bloodline
+                  Family Side
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   <button
@@ -320,7 +320,7 @@ export default function MemberModal({
                         : 'bg-[#050b07] border-[#223d2b] text-amber-300/70 hover:border-[#740001]'
                     }`}
                   >
-                    🦁 Gryffindor Paternal
+                    Father's Side
                   </button>
 
                   <button
@@ -332,7 +332,7 @@ export default function MemberModal({
                         : 'bg-[#050b07] border-[#223d2b] text-emerald-300/70 hover:border-emerald-600'
                     }`}
                   >
-                    🐍 Slytherin Maternal
+                    Mother's Side
                   </button>
 
                   <button
@@ -344,7 +344,7 @@ export default function MemberModal({
                         : 'bg-[#050b07] border-[#223d2b] text-amber-300/70 hover:border-amber-600'
                     }`}
                   >
-                    ✨ Direct / United
+                    Both Sides / Direct
                   </button>
                 </div>
               </div>
@@ -353,16 +353,16 @@ export default function MemberModal({
               <div className="p-4 rounded-2xl bg-[#09150d] border border-[#d4af37]/30 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-serif font-bold text-[#fef08a] uppercase tracking-wider flex items-center gap-1.5">
-                    📜 Bind Kinship Threads
+                    Family Relationships
                   </span>
-                  <span className="text-[11px] text-emerald-300/70 font-serif">Link sire, dam, betrothed, or siblings</span>
+                  <span className="text-[11px] text-emerald-300/70 font-serif">Link parents, spouse, or siblings</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                   {/* Select Father */}
                   <div>
                     <label className="block text-[11px] font-serif font-semibold text-amber-300 mb-1">
-                      🦁 Father (Sire)
+                      Father
                     </label>
                     <select
                       value={formData.fatherId || ''}
@@ -381,7 +381,7 @@ export default function MemberModal({
                   {/* Select Mother */}
                   <div>
                     <label className="block text-[11px] font-serif font-semibold text-emerald-300 mb-1">
-                      🐍 Mother (Dam)
+                      Mother
                     </label>
                     <select
                       value={formData.motherId || ''}
@@ -400,7 +400,7 @@ export default function MemberModal({
                   {/* Select Spouse */}
                   <div>
                     <label className="block text-[11px] font-serif font-semibold text-amber-300 mb-1">
-                      💍 Betrothed / Spouse
+                      Spouse (Husband / Wife)
                     </label>
                     <select
                       value={formData.spouseId || ''}
@@ -419,7 +419,7 @@ export default function MemberModal({
                   {/* Select Sibling (Brother / Sister) */}
                   <div>
                     <label className="block text-[11px] font-serif font-semibold text-indigo-300 mb-1">
-                      👫 Sibling (Brother/Sister)
+                      Sibling (Brother / Sister)
                     </label>
                     <select
                       value={(formData.siblingIds && formData.siblingIds[0]) || ''}
@@ -452,7 +452,7 @@ export default function MemberModal({
             <div className="p-4 rounded-2xl bg-[#09150d] border border-[#d4af37]/40 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-serif font-bold text-[#fef08a] uppercase tracking-wider">
-                  Select Cameo Portrait
+                  Select Avatar Photo
                 </span>
                 <button
                   type="button"
@@ -473,7 +473,7 @@ export default function MemberModal({
                 className="w-full py-2 px-3 rounded-xl bg-[#050b07] border border-[#274833] hover:border-[#d4af37] text-xs font-serif font-semibold text-amber-300 flex items-center justify-center gap-2 transition-all"
               >
                 <ImageOff className="w-4 h-4 text-amber-400" />
-                🚫 Blank Silhouette (Vintage Leaf Sigil)
+                🚫 Default Avatar
               </button>
 
               <div className="grid grid-cols-6 gap-2 max-h-40 overflow-y-auto pt-2 border-t border-[#223d2b]">
@@ -493,7 +493,7 @@ export default function MemberModal({
 
               <div className="pt-2">
                 <label className="block text-[11px] font-serif font-semibold text-emerald-300 mb-1">
-                  Or Inscribe External Portrait URL
+                  Or Enter Image URL
                 </label>
                 <input
                   type="url"
@@ -510,7 +510,7 @@ export default function MemberModal({
           {/* Gender & Lifespan Status */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-serif font-semibold text-amber-200 mb-2">Gender Identity</label>
+              <label className="block text-xs font-serif font-semibold text-amber-200 mb-2">Gender</label>
               <div className="flex gap-2">
                 <button
                   type="button"
@@ -521,7 +521,7 @@ export default function MemberModal({
                       : 'bg-[#050b07] border-[#223d2b] text-amber-300/60 hover:border-emerald-600'
                   }`}
                 >
-                  ♂ Wizard (Male)
+                  ♂ Male
                 </button>
                 <button
                   type="button"
@@ -532,7 +532,7 @@ export default function MemberModal({
                       : 'bg-[#050b07] border-[#223d2b] text-amber-300/60 hover:border-pink-800'
                   }`}
                 >
-                  ♀ Witch (Female)
+                  ♀ Female
                 </button>
                 <button
                   type="button"
@@ -557,8 +557,8 @@ export default function MemberModal({
                   className="w-4 h-4 rounded text-amber-600 bg-[#050b07] border-[#274833] focus:ring-[#d4af37]"
                 />
                 <div>
-                  <span className="text-xs font-serif font-semibold text-amber-200">Departed Ancestor</span>
-                  <p className="text-[11px] text-emerald-400/70 font-serif">Check if member has passed beyond the veil</p>
+                  <span className="text-xs font-serif font-semibold text-amber-200">Deceased</span>
+                  <p className="text-[11px] text-emerald-400/70 font-serif">Check if this person has passed away</p>
                 </div>
               </label>
             </div>
@@ -581,11 +581,11 @@ export default function MemberModal({
 
             <div>
               <label className="block text-xs font-serif font-semibold text-amber-200 mb-1">
-                Seat / Origin Realm
+                Birthplace / Location
               </label>
               <input
                 type="text"
-                placeholder="e.g. Godric's Hollow, London"
+                placeholder="e.g. New York, NY, USA"
                 value={formData.birthPlace}
                 onChange={(e) => setFormData({ ...formData, birthPlace: e.target.value })}
                 className="w-full bg-[#050b07] border border-[#274833] rounded-xl px-3 py-2 text-sm text-amber-100 placeholder:text-emerald-700 focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
@@ -597,7 +597,7 @@ export default function MemberModal({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-3 rounded-2xl bg-[#1e0a0a]/60 border border-[#740001]/60">
               <div>
                 <label className="block text-xs font-serif font-semibold text-rose-300 mb-1">
-                  Year of Passing
+                  Year of Passing (Death)
                 </label>
                 <input
                   type="text"
@@ -610,11 +610,11 @@ export default function MemberModal({
 
               <div>
                 <label className="block text-xs font-serif font-semibold text-rose-300 mb-1">
-                  Resting Place
+                  Place of Death / Burial Place
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Department of Mysteries"
+                  placeholder="e.g. Boston, MA, USA"
                   value={formData.deathPlace}
                   onChange={(e) => setFormData({ ...formData, deathPlace: e.target.value })}
                   className="w-full bg-[#050b07] border border-[#740001]/50 rounded-xl px-3 py-2 text-sm text-amber-100 focus:outline-none focus:ring-1 focus:ring-rose-500"
@@ -627,11 +627,11 @@ export default function MemberModal({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-serif font-semibold text-amber-200 mb-1">
-                Magical Calling / Profession
+                Occupation / Profession
               </label>
               <input
                 type="text"
-                placeholder="e.g. Order of the Phoenix, Auror, Potioneer"
+                placeholder="e.g. Software Engineer, Teacher, Doctor"
                 value={formData.occupation}
                 onChange={(e) => setFormData({ ...formData, occupation: e.target.value })}
                 className="w-full bg-[#050b07] border border-[#274833] rounded-xl px-3 py-2 text-sm text-amber-100 placeholder:text-emerald-700 focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
@@ -640,11 +640,11 @@ export default function MemberModal({
 
             <div>
               <label className="block text-xs font-serif font-semibold text-amber-200 mb-1">
-                House Traits / Runes (Comma Separated)
+                Tags / Keywords (Comma Separated)
               </label>
               <input
                 type="text"
-                placeholder="e.g. Gryffindor, Marauder, Animagus"
+                placeholder="e.g. Veteran, Musician, Artist"
                 value={formData.tags}
                 onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
                 className="w-full bg-[#050b07] border border-[#274833] rounded-xl px-3 py-2 text-sm text-amber-100 placeholder:text-emerald-700 focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
@@ -655,11 +655,11 @@ export default function MemberModal({
           {/* Biography & Stories */}
           <div>
             <label className="block text-xs font-serif font-semibold text-amber-200 mb-1">
-              Lineage Lore & Chronicle
+              Biography & Notes
             </label>
             <textarea
               rows={3}
-              placeholder="Inscribe ancestral deeds, family alliances, or historical memory..."
+              placeholder="Add biography, memories, or notes about this person..."
               value={formData.bio}
               onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
               className="w-full bg-[#050b07] border border-[#274833] rounded-xl p-3 text-sm text-amber-100 focus:outline-none focus:ring-1 focus:ring-[#d4af37] placeholder:text-emerald-800 resize-none font-serif"
@@ -679,7 +679,7 @@ export default function MemberModal({
               type="submit"
               className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#740001] via-[#941c1c] to-[#b8860b] hover:from-[#941c1c] hover:to-[#d4af37] text-[#fef08a] text-xs font-serif font-bold tracking-wider shadow-[0_0_15px_rgba(212,175,55,0.35)] border border-[#d4af37]/60 transition-all transform hover:scale-[1.02]"
             >
-              {initialMember ? 'Save Lineage Seal' : 'Inscribe into Tapestry'}
+              {initialMember ? 'Save Changes' : 'Add Member'}
             </button>
           </div>
 

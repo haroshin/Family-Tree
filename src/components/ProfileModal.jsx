@@ -61,7 +61,7 @@ export default function ProfileModal({
             backgroundSize: '24px 24px'
           }} />
           <div className="absolute top-4 left-6 text-xs font-serif text-[#d4af37]/70 tracking-widest uppercase">
-            ✦ House of Noble Lineage Folio ✦
+            ✦ Member Profile ✦
           </div>
           <button
             onClick={onClose}
@@ -97,7 +97,7 @@ export default function ProfileModal({
                 className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#09150d] hover:bg-[#122618] text-amber-200 text-xs font-serif font-semibold border border-[#2b4c34] hover:border-[#d4af37] transition-all"
               >
                 <Edit3 className="w-3.5 h-3.5 text-[#d4af37]" />
-                Inscribe Edits
+                Edit Profile
               </button>
 
               {!isMe && (
@@ -106,7 +106,7 @@ export default function ProfileModal({
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#740001]/30 hover:bg-[#740001] text-[#fef08a] hover:text-white text-xs font-serif font-semibold border border-[#d4af37]/40 transition-all shadow-md"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                  Crown as Progenitor
+                  Set as Root ("Me")
                 </button>
               )}
 
@@ -117,7 +117,7 @@ export default function ProfileModal({
                     onClose();
                   }}
                   className="p-2 rounded-xl bg-[#1e0a0a]/60 hover:bg-[#740001] text-rose-300 hover:text-white border border-[#740001]/50 transition-colors"
-                  title="Expel from Lineage"
+                  title="Delete Member"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -134,7 +134,7 @@ export default function ProfileModal({
               </h2>
               {member.maidenName && (
                 <span className="text-sm font-serif text-emerald-300/80 italic">
-                  (House of {member.maidenName})
+                  (Maiden Name: {member.maidenName})
                 </span>
               )}
             </div>
@@ -143,7 +143,7 @@ export default function ProfileModal({
               <span className={`px-3 py-1 rounded-full text-xs font-serif font-bold ${
                 isMe ? 'bg-[#740001]/40 text-[#fef08a] border border-[#d4af37]' : 'bg-[#1a472a]/40 text-emerald-200 border border-emerald-500/40'
               }`}>
-                {member.relationToMe || (isMe ? 'Me (Noble Progenitor)' : 'Noble Kin')}
+                {member.relationToMe || (isMe ? 'Me (Root)' : 'Relative')}
               </span>
 
               <span className="px-3 py-1 rounded-full text-xs font-serif font-medium bg-[#07100a] text-amber-200 border border-[#24422e] flex items-center gap-1">
@@ -167,7 +167,7 @@ export default function ProfileModal({
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-serif font-semibold text-emerald-300/80 block uppercase tracking-wider">Ancestral Seat</span>
+                  <span className="text-[11px] font-serif font-semibold text-emerald-300/80 block uppercase tracking-wider">Birthplace</span>
                   <span className="text-xs font-serif font-medium text-amber-100">{member.birthPlace}</span>
                 </div>
               </div>
@@ -179,7 +179,7 @@ export default function ProfileModal({
                   <Briefcase className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-serif font-semibold text-emerald-300/80 block uppercase tracking-wider">Magical Calling</span>
+                  <span className="text-[11px] font-serif font-semibold text-emerald-300/80 block uppercase tracking-wider">Occupation</span>
                   <span className="text-xs font-serif font-medium text-amber-100">{member.occupation}</span>
                 </div>
               </div>
@@ -191,7 +191,7 @@ export default function ProfileModal({
             <div className="mt-6 p-4 rounded-2xl bg-[#07100a] border border-[#233f2c]">
               <h4 className="text-xs font-serif font-bold text-[#fef08a] uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <Bookmark className="w-3.5 h-3.5 text-[#d4af37]" />
-                Ancestral Lore & Deeds
+                Biography & Notes
               </h4>
               <p className="text-xs text-amber-200/90 leading-relaxed whitespace-pre-line font-serif">
                 {member.bio}
@@ -214,7 +214,7 @@ export default function ProfileModal({
           <div className="mt-6 pt-6 border-t border-[#233f2c] space-y-4">
             <h4 className="text-xs font-serif font-bold text-emerald-300/80 uppercase tracking-wider flex items-center gap-1.5">
               <GitFork className="w-4 h-4 text-[#d4af37] rotate-180" />
-              Immediate Bloodline Threads
+              Immediate Family
             </h4>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -227,14 +227,14 @@ export default function ProfileModal({
                 >
                   <img src={father.photo} alt={father.name} className="w-10 h-10 rounded-xl object-cover border border-[#2b4c34]" />
                   <div className="flex-1 min-w-0">
-                    <span className="text-[10px] font-serif font-bold text-[#fef08a] uppercase tracking-wider block">🦁 Sire (Father)</span>
+                    <span className="text-[10px] font-serif font-bold text-[#fef08a] uppercase tracking-wider block">Father</span>
                     <span className="text-xs font-serif font-semibold text-amber-100 truncate block group-hover:text-[#fef08a]">{father.name}</span>
                   </div>
                   <ArrowRight className="w-4 h-4 text-emerald-500 group-hover:text-[#d4af37] group-hover:translate-x-1 transition-all" />
                 </div>
               ) : (
                 <div className="p-3 rounded-2xl bg-[#07100a]/50 border border-dashed border-[#24422e] text-xs font-serif text-emerald-600 flex items-center justify-between">
-                  <span>Sire Unknown</span>
+                  <span>Father Not Listed</span>
                 </div>
               )}
 
@@ -246,14 +246,14 @@ export default function ProfileModal({
                 >
                   <img src={mother.photo} alt={mother.name} className="w-10 h-10 rounded-xl object-cover border border-[#2b4c34]" />
                   <div className="flex-1 min-w-0">
-                    <span className="text-[10px] font-serif font-bold text-emerald-300 uppercase tracking-wider block">🐍 Dam (Mother)</span>
+                    <span className="text-[10px] font-serif font-bold text-emerald-300 uppercase tracking-wider block">Mother</span>
                     <span className="text-xs font-serif font-semibold text-emerald-100 truncate block group-hover:text-emerald-200">{mother.name}</span>
                   </div>
                   <ArrowRight className="w-4 h-4 text-emerald-500 group-hover:text-emerald-300 group-hover:translate-x-1 transition-all" />
                 </div>
               ) : (
                 <div className="p-3 rounded-2xl bg-[#07100a]/50 border border-dashed border-[#24422e] text-xs font-serif text-emerald-600 flex items-center justify-between">
-                  <span>Dam Unknown</span>
+                  <span>Mother Not Listed</span>
                 </div>
               )}
 
@@ -266,7 +266,7 @@ export default function ProfileModal({
                   <img src={spouse.photo} alt={spouse.name} className="w-10 h-10 rounded-xl object-cover border border-[#d4af37]" />
                   <div className="flex-1 min-w-0">
                     <span className="text-[10px] font-serif font-bold text-[#fef08a] uppercase tracking-wider block">
-                      💍 Betrothed ({spouse.gender === 'female' ? 'Wife' : 'Husband'})
+                      💍 Spouse ({spouse.gender === 'female' ? 'Wife' : 'Husband'})
                     </span>
                     <span className="text-xs font-serif font-semibold text-amber-100 truncate block group-hover:text-[#fef08a]">{spouse.name}</span>
                   </div>
@@ -308,7 +308,7 @@ export default function ProfileModal({
             {children.length > 0 && (
               <div className="space-y-2 pt-2">
                 <span className="text-[11px] font-serif font-bold text-emerald-300 uppercase tracking-wider block">
-                  👶 Offspring & Descendants ({children.length})
+                  👶 Children ({children.length})
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {children.map((child) => (

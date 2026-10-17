@@ -140,7 +140,7 @@ export default function App() {
             gender: user.gender || 'male',
             photo: user.photo,
             birthYear: user.birthYear || '1998',
-            relationToMe: 'Me (Progenitor)'
+            relationToMe: 'Me'
           }
         ];
         const updated = updateGenerations(starter, 'me');
@@ -345,7 +345,7 @@ export default function App() {
           gender: currentUser?.gender || 'male',
           photo: currentUser?.photo || JUST_ME_TEMPLATE[0].photo,
           birthYear: currentUser?.birthYear || '1998',
-          relationToMe: 'Me (Progenitor)'
+          relationToMe: 'Me'
         }
       ];
       setMembers(updateGenerations(personalized, 'me'));
@@ -364,14 +364,14 @@ export default function App() {
         const image = canvas.toDataURL('image/png');
         const link = document.createElement('a');
         link.href = image;
-        link.download = `noble_lineage_tapestry_${new Date().toISOString().slice(0, 10)}.png`;
+        link.download = `family_tree_${new Date().toISOString().slice(0, 10)}.png`;
         link.click();
       } catch (err) {
         console.error('Failed to export image', err);
         alert('Could not capture tree image.');
       }
     } else {
-      alert('Please switch to Oak Tree Canvas view to export tree snapshot.');
+      alert('Please switch to Tree View to export tree snapshot.');
     }
   };
 

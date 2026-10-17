@@ -50,15 +50,15 @@ export default function AnalyticsView({ members }) {
         <div className="p-6 rounded-3xl bg-[#0b160f] border-2 border-[#d4af37]/40 shadow-2xl flex items-center justify-between tapestry-burnt-edges">
           <div>
             <h2 className="text-xl font-['Cinzel_Decorative',serif] font-bold text-[#fef08a] flex items-center gap-2">
-              <span className="text-xl">🔮</span>
-              Divination & Bloodline Lore Insights
+              <span className="text-xl">📊</span>
+              Family Tree Statistics & Insights
             </h2>
             <p className="text-xs text-emerald-300/80 font-serif mt-1">
-              Arcane analytics, ancient geographical seats, and generational longevity across the bloodlines
+              Overview of family statistics, origins, professions, and longevity
             </p>
           </div>
           <span className="px-3.5 py-1.5 rounded-full text-xs font-serif font-semibold bg-[#07100a] text-[#fef08a] border border-[#d4af37]/40 shadow-sm">
-            {maxGen + 1} Epochs Documented
+            {maxGen + 1} Generations Documented
           </span>
         </div>
 
@@ -69,7 +69,7 @@ export default function AnalyticsView({ members }) {
               <Users className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs font-serif font-semibold text-emerald-300/80 block uppercase tracking-wider">Total Kinfolk</span>
+              <span className="text-xs font-serif font-semibold text-emerald-300/80 block uppercase tracking-wider">Total Members</span>
               <span className="text-2xl font-['Cinzel',serif] font-bold text-[#fef08a]">{total}</span>
             </div>
           </div>
@@ -79,8 +79,8 @@ export default function AnalyticsView({ members }) {
               <Award className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs font-serif font-semibold text-emerald-300/80 block uppercase tracking-wider">Ancestral Depth</span>
-              <span className="text-2xl font-['Cinzel',serif] font-bold text-[#fef08a]">{maxGen + 1} Epochs</span>
+              <span className="text-xs font-serif font-semibold text-emerald-300/80 block uppercase tracking-wider">Generations Depth</span>
+              <span className="text-2xl font-['Cinzel',serif] font-bold text-[#fef08a]">{maxGen + 1} Generations</span>
             </div>
           </div>
 
@@ -89,8 +89,8 @@ export default function AnalyticsView({ members }) {
               <Heart className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs font-serif font-semibold text-emerald-300/80 block uppercase tracking-wider">Living vs Departed</span>
-              <span className="text-2xl font-['Cinzel',serif] font-bold text-[#fef08a]">{living} <span className="text-xs font-normal text-amber-200/70">living / {deceased} passed</span></span>
+              <span className="text-xs font-serif font-semibold text-emerald-300/80 block uppercase tracking-wider">Living vs Deceased</span>
+              <span className="text-2xl font-['Cinzel',serif] font-bold text-[#fef08a]">{living} <span className="text-xs font-normal text-amber-200/70">living / {deceased} deceased</span></span>
             </div>
           </div>
 
@@ -99,7 +99,7 @@ export default function AnalyticsView({ members }) {
               <Calendar className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs font-serif font-semibold text-emerald-300/80 block uppercase tracking-wider">Average Longevity</span>
+              <span className="text-xs font-serif font-semibold text-emerald-300/80 block uppercase tracking-wider">Average Lifespan</span>
               <span className="text-2xl font-['Cinzel',serif] font-bold text-[#fef08a]">{avgLifespan} {avgLifespan !== 'N/A' && 'yrs'}</span>
             </div>
           </div>
@@ -112,11 +112,11 @@ export default function AnalyticsView({ members }) {
           <div className="p-6 rounded-3xl bg-[#0b160f] border-2 border-[#d4af37]/40 shadow-xl space-y-4 tapestry-burnt-edges">
             <h3 className="text-sm font-['Cinzel',serif] font-bold text-[#fef08a] uppercase tracking-wider flex items-center gap-2">
               <Globe className="w-4 h-4 text-[#d4af37]" />
-              Geographic Origins & Ancestral Realms
+              Geographic Origins
             </h3>
             <div className="space-y-3">
               {Object.entries(locationCounts).length === 0 ? (
-                <p className="text-xs text-emerald-600/70 italic">No ancestral seats entered yet.</p>
+                <p className="text-xs text-emerald-600/70 italic">No birthplaces entered yet.</p>
               ) : (
                 Object.entries(locationCounts)
                   .sort((a, b) => b[1] - a[1])
@@ -145,11 +145,11 @@ export default function AnalyticsView({ members }) {
           <div className="p-6 rounded-3xl bg-[#0b160f] border-2 border-[#d4af37]/40 shadow-xl space-y-4 tapestry-burnt-edges">
             <h3 className="text-sm font-['Cinzel',serif] font-bold text-[#fef08a] uppercase tracking-wider flex items-center gap-2">
               <Shield className="w-4 h-4 text-[#d4af37]" />
-              Magical Callings & Noble Guilds
+              Occupations & Professions
             </h3>
             <div className="space-y-3">
               {Object.entries(occCounts).length === 0 ? (
-                <p className="text-xs text-emerald-600/70 italic">No callings inscribed yet.</p>
+                <p className="text-xs text-emerald-600/70 italic">No occupations entered yet.</p>
               ) : (
                 Object.entries(occCounts)
                   .sort((a, b) => b[1] - a[1])
@@ -157,7 +157,7 @@ export default function AnalyticsView({ members }) {
                     <div key={occ} className="flex items-center justify-between p-3 rounded-2xl bg-[#07100a] border border-[#24422e]">
                       <span className="text-xs font-semibold text-amber-100">{occ}</span>
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-[#740001]/30 text-[#fef08a] border border-[#d4af37]/30">
-                        {count} {count === 1 ? 'kin' : 'kinfolk'}
+                        {count} {count === 1 ? 'member' : 'members'}
                       </span>
                     </div>
                   ))

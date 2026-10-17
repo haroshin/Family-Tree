@@ -105,7 +105,7 @@ export default function Navbar({
             <div 
               className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-[#1a472a] via-[#102a1b] to-[#07130c] border-2 border-[#d4af37] shadow-[0_0_12px_rgba(212,175,55,0.4)] cursor-pointer shrink-0 hover:scale-105 transition-transform"
               onClick={() => setActiveView('vintagetree')}
-              title="Ancestry Arcana – The Noble Lineage"
+              title="Family Tree"
             >
               <Sparkles className="w-4 h-4 text-amber-300" />
             </div>
@@ -120,7 +120,7 @@ export default function Navbar({
                     value={editedTitle}
                     onChange={(e) => setEditedTitle(e.target.value)}
                     className="bg-[#08110b] border-2 border-[#d4af37] rounded-lg px-2.5 py-0.5 text-xs sm:text-sm font-cinzel-dec font-bold text-[#fef08a] focus:outline-none focus:ring-2 focus:ring-[#f5d77f] w-48 sm:w-80 shadow-inner"
-                    placeholder="The Noble and Most Ancient House of..."
+                    placeholder="My Family Tree..."
                   />
                   <button
                     type="submit"
@@ -144,16 +144,16 @@ export default function Navbar({
                   <span 
                     onClick={handleStartEdit}
                     className="font-cinzel-dec font-bold text-sm sm:text-base lg:text-lg tracking-wider text-[#fce7a1] hover:text-white cursor-pointer transition-colors truncate drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]"
-                    title="Click to rename your lineage tapestry"
+                    title="Click to rename your family tree"
                   >
-                    {currentUser?.treeName || 'The Noble Lineage Tapestry'}
+                    {currentUser?.treeName || 'My Family Tree'}
                   </span>
                   
                   <button
                     type="button"
                     onClick={handleStartEdit}
                     className="p-1 rounded-md text-[#d4af37]/60 hover:text-[#fef08a] hover:bg-[#1a3824]/50 transition-all shrink-0"
-                    title="Rename this noble tapestry"
+                    title="Rename this family tree"
                   >
                     <Edit3 className="w-3.5 h-3.5" />
                   </button>
@@ -162,7 +162,7 @@ export default function Navbar({
 
               <div className="flex items-center gap-2">
                 <p className="text-[10px] sm:text-[11px] text-[#c7aa60] font-serif-vintage truncate">
-                  {membersCount} Ancestors Weaved {currentUser ? `• Arch-Keeper: ${currentUser.name}` : ''}
+                  {membersCount} Members {currentUser ? `• Owner: ${currentUser.name}` : ''}
                 </p>
                 <span className="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-950/80 border border-emerald-600/40 text-emerald-300 text-[10px] font-sans" title="Connected to MongoDB Server">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -180,7 +180,7 @@ export default function Navbar({
               <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 text-[#d4af37]/70" />
               <input
                 type="text"
-                placeholder="Seek bloodline..."
+                placeholder="Search members..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-[#122319] border border-[#40684c] text-[#fef9c3] text-xs rounded-xl pl-8 pr-2.5 py-1.5 focus:outline-none focus:border-[#d4af37] font-serif-vintage placeholder:text-[#d4af37]/40 shadow-inner"
@@ -195,17 +195,17 @@ export default function Navbar({
               )}
             </div>
 
-            {/* + Inscribe Member Button */}
+            {/* + Add Member Button */}
             <button
               onClick={() => onAddMember(null)}
               className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#856322] via-[#a37c2b] to-[#6d511b] hover:from-[#9c7529] hover:to-[#856322] text-[#fff9db] font-serif-vintage font-bold text-xs shadow-[0_2px_10px_rgba(212,175,55,0.25)] border border-[#e5c158] transition-all hover:scale-[1.02] shrink-0"
-              title="Inscribe a new family member onto the tapestry"
+              title="Add a new family member"
             >
               <Plus className="w-3.5 h-3.5 text-amber-200" />
-              <span className="hidden sm:inline">Inscribe Member</span>
+              <span className="hidden sm:inline">Add Member</span>
             </button>
 
-            {/* Export / Archives Dropdown */}
+            {/* Export / Import Dropdown */}
             <div className="relative shrink-0">
               <button
                 onClick={() => {
@@ -213,45 +213,45 @@ export default function Navbar({
                   setShowUserMenu(false);
                 }}
                 className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-[#122319] hover:bg-[#1a3824] text-[#fce7a1] text-xs font-serif-vintage font-bold border border-[#40684c] transition-all shadow-sm"
-                title="Archive and export tapestry parchment"
+                title="Export and import family tree"
               >
                 <Download className="w-3.5 h-3.5 text-[#d4af37]" />
-                <span className="hidden sm:inline">Archives</span>
+                <span className="hidden sm:inline">Export / Import</span>
               </button>
 
               {showExportMenu && (
                 <div className="absolute right-0 mt-2 w-60 bg-[#0f1d14] border-2 border-[#8b6b23] rounded-2xl shadow-[0_10px_35px_rgba(0,0,0,0.85)] py-2 z-50 animate-in fade-in">
                   <div className="px-3 py-1 text-[10px] font-bold text-[#d4af37] uppercase tracking-widest font-cinzel-dec">
-                    Tapestry Archives
+                    Export Tree
                   </div>
                   <button
                     onClick={() => { onExportJSON(); setShowExportMenu(false); }}
                     className="w-full text-left px-4 py-2 text-xs text-[#fce7a1] hover:bg-[#1a3824] flex items-center gap-2 font-serif-vintage"
                   >
                     <Download className="w-3.5 h-3.5 text-[#d4af37]" />
-                    Export Spellbook JSON
+                    Export as JSON
                   </button>
                   <button
                     onClick={() => { onExportGEDCOM(); setShowExportMenu(false); }}
                     className="w-full text-left px-4 py-2 text-xs text-[#fce7a1] hover:bg-[#1a3824] flex items-center gap-2 font-serif-vintage"
                   >
                     <Scroll className="w-3.5 h-3.5 text-[#d4af37]" />
-                    Export GEDCOM Scroll (.ged)
+                    Export GEDCOM (.ged)
                   </button>
                   <button
                     onClick={() => { onExportImage(); setShowExportMenu(false); }}
                     className="w-full text-left px-4 py-2 text-xs text-[#fce7a1] hover:bg-[#1a3824] flex items-center gap-2 border-b border-[#2d4734] font-serif-vintage"
                   >
                     <Download className="w-3.5 h-3.5 text-[#d4af37]" />
-                    Save Tapestry Painting (PNG)
+                    Export as Image (PNG)
                   </button>
 
                   <div className="px-3 py-1.5 text-[10px] font-bold text-[#d4af37] uppercase tracking-widest font-cinzel-dec">
-                    Lineage Lore
+                    Import & Templates
                   </div>
                   <label className="w-full text-left px-4 py-2 text-xs text-[#fce7a1] hover:bg-[#1a3824] flex items-center gap-2 cursor-pointer font-serif-vintage">
                     <Upload className="w-3.5 h-3.5 text-[#d4af37]" />
-                    Import Ancestry Scroll
+                    Import JSON File
                     <input type="file" accept=".json" onChange={handleFileChange} className="hidden" />
                   </label>
                   <button
@@ -259,14 +259,14 @@ export default function Navbar({
                     className="w-full text-left px-4 py-2 text-xs text-[#fce7a1] hover:bg-[#1a3824] flex items-center gap-2 font-serif-vintage"
                   >
                     <Sparkles className="w-3.5 h-3.5 text-[#d4af37]" />
-                    Load Ancient 4-Gen Lore
+                    Load 4-Generation Demo Tree
                   </button>
                   <button
                     onClick={() => { onResetTree(); setShowExportMenu(false); }}
                     className="w-full text-left px-4 py-2 text-xs text-rose-300 hover:bg-rose-950/60 flex items-center gap-2 font-serif-vintage"
                   >
                     <RotateCcw className="w-3.5 h-3.5 text-rose-400" />
-                    Reset to Sole Heir (Just Me)
+                    Reset Tree (Just Me)
                   </button>
                 </div>
               )}
@@ -284,7 +284,7 @@ export default function Navbar({
                       setShowExportMenu(false);
                     }}
                     className="flex items-center gap-1.5 p-1 rounded-xl bg-[#122319] hover:bg-[#1a3824] text-[#fce7a1] border border-[#40684c] transition-all hover:border-[#d4af37] shadow-sm"
-                    title={`Noble Keeper: ${currentUser.name}`}
+                    title={`Account: ${currentUser.name}`}
                   >
                     <div className="relative shrink-0">
                       <img
@@ -335,7 +335,7 @@ export default function Navbar({
                             {currentUser.name}
                           </p>
                           <p className="text-[10px] text-amber-300/80 truncate font-serif-vintage">
-                            {currentUser.treeName || 'The Noble Lineage'}
+                            {currentUser.treeName || 'My Family Tree'}
                           </p>
                           <p className="text-[10px] text-amber-400/60 truncate flex items-center gap-1 font-sans">
                             {currentUser.authProvider === 'google' && <span className="text-[9px] text-amber-200 bg-[#163821] px-1 py-0.2 rounded border border-[#2a683e]">Google</span>}
@@ -353,7 +353,7 @@ export default function Navbar({
                           className="w-full text-left px-3 py-2 rounded-xl text-xs text-rose-300 hover:bg-rose-950/60 hover:text-rose-100 flex items-center gap-2 font-serif-vintage transition-all"
                         >
                           <LogOut className="w-4 h-4 text-rose-400" />
-                          <span>Depart Chamber (Sign Out)</span>
+                          <span>Sign Out</span>
                         </button>
                       </div>
                     </div>
@@ -364,10 +364,10 @@ export default function Navbar({
                 <button
                   onClick={onLogout}
                   className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#4d0c12] to-[#2e070b] hover:from-[#6b121a] hover:to-[#4d0c12] border border-[#a82531]/80 hover:border-red-400 text-rose-200 hover:text-white text-xs font-serif-vintage font-bold shadow-md transition-all hover:scale-[1.03] shrink-0"
-                  title="Sign out of this noble chamber"
+                  title="Sign Out"
                 >
                   <LogOut className="w-3.5 h-3.5 text-rose-400" />
-                  <span className="hidden sm:inline">Depart</span>
+                  <span className="hidden sm:inline">Sign Out</span>
                 </button>
 
               </div>
@@ -378,7 +378,7 @@ export default function Navbar({
         </div>
       </div>
 
-      {/* ================= TIER 2: WORKSPACE TOOLBAR (Views & House Lineage Filters) ================= */}
+      {/* ================= TIER 2: WORKSPACE TOOLBAR (Views & Filters) ================= */}
       <div className="w-full px-3 sm:px-5 lg:px-6 bg-[#071109]/95 border-t border-[#233827]/70 py-1.5">
         <div className="flex items-center justify-between gap-3 overflow-x-auto no-scrollbar">
           
@@ -393,7 +393,7 @@ export default function Navbar({
               }`}
             >
               <Trees className="w-3.5 h-3.5 text-[#f5d77f]" />
-              Tapestry Canvas
+              Tree View
             </button>
             <button
               onClick={() => setActiveView('tree')}
@@ -404,7 +404,7 @@ export default function Navbar({
               }`}
             >
               <GitFork className="w-3.5 h-3.5 rotate-180" />
-              Constellations
+              Chart View
             </button>
             <button
               onClick={() => setActiveView('pedigree')}
@@ -415,7 +415,7 @@ export default function Navbar({
               }`}
             >
               <LayoutGrid className="w-3.5 h-3.5" />
-              Pedigree Scroll
+              Pedigree View
             </button>
             <button
               onClick={() => setActiveView('timeline')}
@@ -426,7 +426,7 @@ export default function Navbar({
               }`}
             >
               <Clock className="w-3.5 h-3.5" />
-              Chronicles
+              Timeline
             </button>
             <button
               onClick={() => setActiveView('analytics')}
@@ -437,7 +437,7 @@ export default function Navbar({
               }`}
             >
               <BarChart3 className="w-3.5 h-3.5" />
-              Divination & Lore
+              Statistics
             </button>
             <button
               onClick={() => setActiveView('directory')}
@@ -448,11 +448,11 @@ export default function Navbar({
               }`}
             >
               <Users className="w-3.5 h-3.5" />
-              House Directory
+              Directory
             </button>
           </nav>
 
-          {/* RIGHT: Hogwarts House Lineage Filter Tabs (Gryffindor vs Slytherin) */}
+          {/* RIGHT: Family Side Lineage Filter Tabs */}
           <div className="flex items-center bg-[#0d1c12] p-1 rounded-xl border border-[#26442f] text-xs font-serif-vintage shrink-0">
             <button
               onClick={() => setSideFilter('all')}
@@ -461,9 +461,9 @@ export default function Navbar({
                   ? 'bg-gradient-to-r from-[#856322] to-[#594215] text-[#fff9db] shadow-md border border-[#d4af37]'
                   : 'text-[#d4af37]/70 hover:text-white hover:bg-[#1a3824]'
               }`}
-              title="Reveal all ancient bloodlines"
+              title="Show all family members"
             >
-              ✨ All Bloodlines
+              All Members
             </button>
             <button
               onClick={() => setSideFilter('father')}
@@ -472,9 +472,9 @@ export default function Navbar({
                   ? 'bg-gradient-to-r from-[#740001] to-[#4a0203] text-[#fef08a] shadow-md border border-[#d3a625]'
                   : 'text-[#e58b88] hover:text-white hover:bg-[#3d0f13]'
               }`}
-              title="Filter by Paternal Lineage (Gryffindor Crimson)"
+              title="Filter by Father's Side"
             >
-              <span>🦁 Gryffindor (Father)</span>
+              <span>Father's Side</span>
               {fCount > 0 && (
                 <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#520001] text-[#fef08a] border border-[#d3a625]/60 font-bold">
                   {fCount}
@@ -488,9 +488,9 @@ export default function Navbar({
                   ? 'bg-gradient-to-r from-[#1a472a] to-[#0f2e1b] text-[#e2e8f0] shadow-md border border-[#2ecc71]'
                   : 'text-[#7ce4a8] hover:text-white hover:bg-[#13301e]'
               }`}
-              title="Filter by Maternal Lineage (Slytherin Emerald)"
+              title="Filter by Mother's Side"
             >
-              <span>🐍 Slytherin (Mother)</span>
+              <span>Mother's Side</span>
               {mCount > 0 && (
                 <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#0d2616] text-[#a7f3d0] border border-[#2ecc71]/60 font-bold">
                   {mCount}

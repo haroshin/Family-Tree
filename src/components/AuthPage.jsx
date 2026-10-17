@@ -147,17 +147,17 @@ export default function AuthPage({ onLoginSuccess }) {
             </div>
             <div>
               <h1 className="font-cinzel-dec font-bold text-xl text-[#fce7a1] tracking-wider drop-shadow">
-                Ancestry Arcana
+                Family Tree
               </h1>
               <p className="text-[11px] text-[#d4af37]/75 font-serif-vintage tracking-widest">
-                The Noble Lineage & Heritage Tapestry
+                Interactive Visual Family Tree & Genealogy Builder
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2 text-xs text-[#d4af37]/80 font-serif-vintage hidden sm:flex">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>Isolated Chambers & Pure Bloodlines Per Account</span>
+            <span>Private & Secure Trees Per Account</span>
           </div>
         </div>
       </header>
@@ -169,13 +169,13 @@ export default function AuthPage({ onLoginSuccess }) {
         <div className="text-center mb-8 max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#122619] border border-[#d4af37]/60 text-[#fef08a] text-xs font-serif-vintage mb-3 shadow-[0_0_15px_rgba(212,175,55,0.2)]">
             <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            <span>The Sacred Genealogy of Ancient Houses</span>
+            <span>Interactive Family Tree & Genealogy Builder</span>
           </div>
           <h2 className="font-cinzel-dec text-3xl sm:text-4xl font-bold text-[#fce7a1] tracking-wide mb-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-            Weave Your Lineage Tapestry
+            Build Your Family Tree
           </h2>
           <p className="text-sm text-amber-200/80 font-serif-vintage">
-            Enter the grand chamber to inspect your ancestral tapestry, or inscribe a new noble house from the ground up.
+            Sign in to explore your family tree, or create a new family tree from scratch.
           </p>
         </div>
 
@@ -200,7 +200,7 @@ export default function AuthPage({ onLoginSuccess }) {
                 }`}
               >
                 <BookOpen className="w-4 h-4 text-amber-300" />
-                Enter Chamber (Sign In)
+                Sign In
               </button>
               <button
                 type="button"
@@ -212,7 +212,7 @@ export default function AuthPage({ onLoginSuccess }) {
                 }`}
               >
                 <Trees className="w-4 h-4 text-amber-300" />
-                Inscribe House (New Tree)
+                Create New Tree
               </button>
             </div>
 
@@ -452,7 +452,7 @@ export default function AuthPage({ onLoginSuccess }) {
                     <Scroll className="absolute left-3.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-amber-400/60" />
                     <input
                       type="text"
-                      placeholder="e.g. The Vance Heritage Tree"
+                      placeholder="e.g. The Vance Family Tree"
                       value={regTreeName}
                       onChange={(e) => setRegTreeName(e.target.value)}
                       className="w-full bg-[#160c05] border border-[#533116] rounded-xl pl-10 pr-3.5 py-2 text-xs text-amber-100 placeholder:text-amber-500/40 focus:outline-none focus:border-amber-500 font-sans"
@@ -468,7 +468,7 @@ export default function AuthPage({ onLoginSuccess }) {
                     className="w-full py-3 rounded-xl bg-gradient-to-r from-amber-700 via-amber-800 to-amber-900 hover:from-amber-600 hover:to-amber-800 text-amber-100 font-serif-vintage font-bold text-sm border border-amber-600 shadow-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
                   >
                     <Trees className="w-4 h-4 text-amber-300" />
-                    <span>Plant My New Family Tree</span>
+                    <span>Create Family Tree</span>
                   </button>
                 </div>
 
@@ -612,7 +612,7 @@ export default function AuthPage({ onLoginSuccess }) {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-[#1a3824] bg-[#071109]/90 py-3 text-center text-[11px] text-[#d4af37]/70 font-serif">
-        <span>Ancestry Arcana • The Noble Lineage Tapestry</span>
+        <span>Family Tree • Interactive Visual Genealogy</span>
       </footer>
 
     </div>

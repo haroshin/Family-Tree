@@ -28,15 +28,15 @@ export default function PedigreeView({ members, onSelectMember, theme }) {
           <div>
             <h2 className="text-xl font-['Cinzel_Decorative',serif] font-bold text-[#fef08a] flex items-center gap-2">
               <span className="text-xl">📜</span>
-              Generational Pedigree Matrix
+              Pedigree View
             </h2>
             <p className="text-xs text-emerald-300/80 font-serif mt-1">
-              Ancient lineage columns moving backwards generation by generation through the ages
+              Family tree organized by generation columns
             </p>
           </div>
           <div className="flex items-center gap-3 text-xs font-serif text-amber-200">
             <span className="px-3.5 py-1.5 rounded-full bg-[#07100a] border border-[#d4af37]/40 text-[#fef08a]">
-              Recorded Epochs: <strong className="text-[#fef08a] font-bold">{maxGen + 1} Generations</strong>
+              Generations: <strong className="text-[#fef08a] font-bold">{maxGen + 1} Generations</strong>
             </span>
           </div>
         </div>
@@ -52,7 +52,7 @@ export default function PedigreeView({ members, onSelectMember, theme }) {
                   {getGenLabel(gen)}
                 </span>
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#740001]/40 text-[#fef08a] border border-[#d4af37]/40">
-                  {list.length} {list.length === 1 ? 'Soul' : 'Kin'}
+                  {list.length} {list.length === 1 ? 'Member' : 'Members'}
                 </span>
               </div>
 
@@ -60,7 +60,7 @@ export default function PedigreeView({ members, onSelectMember, theme }) {
               <div className="space-y-3 font-serif">
                 {list.length === 0 ? (
                   <div className="p-6 rounded-2xl bg-[#07100a]/60 border border-dashed border-[#24422e] text-center text-xs text-emerald-600/70 font-serif">
-                    No ancestral lore inscribed for this epoch yet.
+                    No members recorded for this generation yet.
                   </div>
                 ) : (
                   list.map((m) => (
@@ -84,7 +84,7 @@ export default function PedigreeView({ members, onSelectMember, theme }) {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
                             <span className="text-[10px] font-bold text-[#d4af37] uppercase tracking-wider font-['Cinzel',serif]">
-                              {m.relationToMe || 'Kin'}
+                              {m.relationToMe || 'Relative'}
                             </span>
                             <ArrowUpRight className="w-3.5 h-3.5 text-emerald-500 group-hover:text-[#d4af37] transition-colors" />
                           </div>

@@ -74,7 +74,7 @@ export default function ContextMenu({
             <div className="min-w-0 flex-1">
               <h4 className="font-['Cinzel',serif] font-bold text-xs text-[#fef08a] truncate">{member.name}</h4>
               <p className="text-[10px] text-amber-400 font-bold tracking-wide uppercase font-serif">
-                {member.id === 'me' ? '★ Progenitor Root' : member.relationToMe || 'Noble Kin'}
+                {member.id === 'me' ? '★ Root Person (Me)' : member.relationToMe || 'Relative'}
               </p>
             </div>
           </div>
@@ -82,7 +82,7 @@ export default function ContextMenu({
           {/* Context Options */}
           <div className="space-y-0.5 text-xs font-serif">
             <div className="px-2 py-1 text-[10px] font-bold text-[#d4af37] uppercase tracking-widest font-['Cinzel',serif]">
-              📜 Inscribe Kinship Thread
+              Add Relative
             </div>
 
             {/* Above: Add Parent */}
@@ -94,10 +94,10 @@ export default function ContextMenu({
               className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#740001]/40 hover:text-[#fef08a] transition-colors text-amber-200"
             >
               <span className="flex items-center gap-2">
-                <span className="text-sm">🦁</span>
-                Inscribe Sire (Father)
+                <span className="text-sm">👨</span>
+                Add Father
               </span>
-              <span className="text-[10px] text-amber-400/80 font-mono">Sire</span>
+              <span className="text-[10px] text-amber-400/80 font-mono">Father</span>
             </button>
 
             <button
@@ -108,10 +108,10 @@ export default function ContextMenu({
               className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#1a472a]/50 hover:text-emerald-200 transition-colors text-emerald-300"
             >
               <span className="flex items-center gap-2">
-                <span className="text-sm">🐍</span>
-                Inscribe Dam (Mother)
+                <span className="text-sm">👩</span>
+                Add Mother
               </span>
-              <span className="text-[10px] text-emerald-400/80 font-mono">Dam</span>
+              <span className="text-[10px] text-emerald-400/80 font-mono">Mother</span>
             </button>
 
             {/* Below: Add Child */}
@@ -124,9 +124,9 @@ export default function ContextMenu({
             >
               <span className="flex items-center gap-2">
                 <ChevronDown className="w-3.5 h-3.5 text-emerald-400" />
-                Inscribe Offspring (Child)
+                Add Child
               </span>
-              <span className="text-[10px] text-emerald-400/80 font-mono">Heir</span>
+              <span className="text-[10px] text-emerald-400/80 font-mono">Child</span>
             </button>
 
             {/* Beside / Side: Spouse & Sibling */}
@@ -139,9 +139,9 @@ export default function ContextMenu({
             >
               <span className="flex items-center gap-2">
                 <Heart className="w-3.5 h-3.5 text-amber-400" />
-                Inscribe Betrothed (Spouse)
+                Add Spouse
               </span>
-              <span className="text-[10px] text-amber-400/80 font-mono">Alliance</span>
+              <span className="text-[10px] text-amber-400/80 font-mono">Spouse</span>
             </button>
 
             <button
@@ -153,9 +153,9 @@ export default function ContextMenu({
             >
               <span className="flex items-center gap-2">
                 <Users className="w-3.5 h-3.5 text-indigo-400" />
-                Inscribe Sibling
+                Add Sibling
               </span>
-              <span className="text-[10px] text-indigo-400/80 font-mono">Kin</span>
+              <span className="text-[10px] text-indigo-400/80 font-mono">Sibling</span>
             </button>
 
             {/* House Lineage Fast Filter Action */}
@@ -168,9 +168,9 @@ export default function ContextMenu({
             >
               <span className="flex items-center gap-2">
                 <Shield className="w-3.5 h-3.5 text-amber-400" />
-                Add to Gryffindor Paternal
+                Add to Father's Side
               </span>
-              <span className="text-[10px] text-amber-400/80 font-mono">🦁</span>
+              <span className="text-[10px] text-amber-400/80 font-mono">Father</span>
             </button>
 
             <button
@@ -182,9 +182,9 @@ export default function ContextMenu({
             >
               <span className="flex items-center gap-2">
                 <Flower2 className="w-3.5 h-3.5 text-emerald-400" />
-                Add to Slytherin Maternal
+                Add to Mother's Side
               </span>
-              <span className="text-[10px] text-emerald-400/80 font-mono">🐍</span>
+              <span className="text-[10px] text-emerald-400/80 font-mono">Mother</span>
             </button>
 
             <div className="my-1 border-t border-[#24422e]" />
@@ -198,7 +198,7 @@ export default function ContextMenu({
               className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-[#122618] text-amber-200 transition-colors"
             >
               <Eye className="w-3.5 h-3.5 text-[#d4af37]" />
-              View Lineage Folio
+              View Profile
             </button>
 
             <button
@@ -209,7 +209,7 @@ export default function ContextMenu({
               className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-[#122618] text-amber-200 transition-colors"
             >
               <Edit3 className="w-3.5 h-3.5 text-[#d4af37]" />
-              Inscribe Member Details
+              Edit Member Details
             </button>
 
             {member.id !== 'me' && onSetAsMe && (
@@ -221,7 +221,7 @@ export default function ContextMenu({
                 className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-[#740001]/50 text-[#fef08a] transition-colors font-bold"
               >
                 <Crown className="w-3.5 h-3.5 text-[#d4af37]" />
-                Crown as Root Progenitor
+                Set as Root ("Me")
               </button>
             )}
 
@@ -234,7 +234,7 @@ export default function ContextMenu({
                 className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-[#740001] text-rose-300 hover:text-white transition-colors"
               >
                 <Trash2 className="w-3.5 h-3.5 text-rose-400" />
-                Expel from Tapestry
+                Delete Member
               </button>
             )}
           </div>
@@ -244,9 +244,9 @@ export default function ContextMenu({
         <div>
           <div className="p-2 bg-[#07100a] rounded-xl border border-[#24422e] mb-2 text-center">
             <h4 className="font-['Cinzel',serif] font-bold text-xs text-[#fef08a] flex items-center justify-center gap-1.5">
-              <GitBranch className="w-4 h-4 text-[#d4af37]" /> Tapestry Arcana Menu
+              <GitBranch className="w-4 h-4 text-[#d4af37]" /> Family Tree Menu
             </h4>
-            <p className="text-[10px] text-emerald-400/70 italic font-serif">Workspace Inscriptions</p>
+            <p className="text-[10px] text-emerald-400/70 italic font-serif">Quick Actions</p>
           </div>
 
           <div className="space-y-1 text-xs font-serif">
@@ -258,7 +258,7 @@ export default function ContextMenu({
               className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-gradient-to-r from-[#740001] via-[#941c1c] to-[#b8860b] hover:from-[#941c1c] hover:to-[#d4af37] text-[#fef08a] font-bold transition-all shadow-md border border-[#d4af37]/60"
             >
               <Plus className="w-4 h-4 text-[#fef08a]" />
-              Inscribe New Bloodline Member
+              Add New Member
             </button>
 
             <button
@@ -269,7 +269,7 @@ export default function ContextMenu({
               className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-[#740001]/40 text-amber-200 transition-colors"
             >
               <Shield className="w-3.5 h-3.5 text-amber-400" />
-              🦁 Add Gryffindor Paternal Sire
+              Add Father
             </button>
 
             <button
@@ -280,7 +280,7 @@ export default function ContextMenu({
               className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-[#1a472a]/50 text-emerald-300 transition-colors"
             >
               <Flower2 className="w-3.5 h-3.5 text-emerald-400" />
-              🐍 Add Slytherin Maternal Dam
+              Add Mother
             </button>
 
             {onCenterView && (
@@ -292,7 +292,7 @@ export default function ContextMenu({
                 className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-[#122618] text-[#fef08a] transition-colors"
               >
                 <Target className="w-3.5 h-3.5 text-[#d4af37]" />
-                Center View on Progenitor ("Me")
+                Center View on Me
               </button>
             )}
           </div>
