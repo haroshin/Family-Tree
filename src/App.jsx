@@ -354,24 +354,47 @@ export default function App() {
 
   // Export tree as PNG Image
   const handleExportImage = async () => {
-    const canvasEl = document.querySelector('.frame-card')?.parentElement?.parentElement || document.querySelector('.node-card')?.parentElement?.parentElement;
-    if (canvasEl) {
-      try {
-        const canvas = await html2canvas(canvasEl, {
-          backgroundColor: '#d8b888',
-          scale: 2
-        });
-        const image = canvas.toDataURL('image/png');
-        const link = document.createElement('a');
-        link.href = image;
-        link.download = `family_tree_${new Date().toISOString().slice(0, 10)}.png`;
-        link.click();
-      } catch (err) {
-        console.error('Failed to export image', err);
-        alert('Could not capture tree image.');
+    const exportRoot = document.getElementById('tree-export-root');
+    const chartRoot = document.querySelector('.node-card')?.closest('.min-w-max');
+    const fallbackCanvas = document.querySelector('.min-w-max') || document.querySelector('.tapestry-canvas');
+    const canvasEl = exportRoot || chartRoot || fallbackCanvas;
+
+    if (!canvasEl) {
+      alert('Could not find tree canvas to capture image.');
+      return;
+    }
+
+    let prevTransform = '';
+    let isTransformAdjusted = false;
+
+    try {
+      if (exportRoot && exportRoot.style.transform) {
+        prevTransform = exportRoot.style.transform;
+        exportRoot.style.transform = 'none';
+        isTransformAdjusted = true;
       }
-    } else {
-      alert('Please switch to Tree View to export tree snapshot.');
+
+      const canvas = await html2canvas(canvasEl, {
+        backgroundColor: '#070d09',
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+      });
+
+      const image = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = image;
+      const safeTreeName = (currentUser?.treeName || 'family_tree').toLowerCase().replace(/[^a-z0-9]/g, '_');
+      link.download = `${safeTreeName}_${new Date().toISOString().slice(0, 10)}.png`;
+      link.click();
+    } catch (err) {
+      console.error('Failed to export image', err);
+      alert('Could not capture tree image: ' + (err.message || 'Error creating canvas snapshot'));
+    } finally {
+      if (isTransformAdjusted && exportRoot) {
+        exportRoot.style.transform = prevTransform;
+      }
     }
   };
 
