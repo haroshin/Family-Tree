@@ -1,11 +1,14 @@
 // API Service connecting the Frontend to Express & MongoDB Backend
+const DEFAULT_API_BASE = 'https://family-tree-6fit.onrender.com/api';
+
 const resolveApiBase = () => {
-  if (import.meta.env.VITE_API_URL) {
-    const raw = import.meta.env.VITE_API_URL;
+  const raw = (import.meta.env.VITE_API_URL || '').trim();
+  // Only accept a real absolute URL; ignore misconfigured values
+  if (/^https?:\/\//i.test(raw)) {
     return raw.endsWith('/') ? raw.slice(0, -1) : raw;
   }
   // Default directly to the live Render MongoDB API
-  return 'https://family-tree-6fit.onrender.com/api';
+  return DEFAULT_API_BASE;
 };
 
 const API_BASE = resolveApiBase();
