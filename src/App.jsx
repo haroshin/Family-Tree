@@ -24,7 +24,9 @@ import {
   DEFAULT_DEMO_USER,
   updateCurrentUserTreeName,
   syncTreeToBackend,
-  fetchTreeFromBackend
+  fetchTreeFromBackend,
+  findRealUserTree,
+  isAlexDemoTree
 } from './utils/authUtils';
 
 const STORAGE_KEY = 'ancestry_family_tree_v1';
@@ -39,17 +41,32 @@ export default function App() {
   const [members, setMembers] = useState(() => {
     const active = getActiveUser();
     if (active) {
-      const saved = getUserTree(active.id);
-      if (saved && saved.length > 0) {
-        return saved;
+      const realTree = findRealUserTree(active, STORAGE_KEY);
+      if (realTree && realTree.length > 0) {
+        return realTree;
       }
+      if (active.id === DEFAULT_DEMO_USER.id) {
+        return updateGenerations(INITIAL_FAMILY_TREE, 'me');
+      }
+      // For real user (like HARO KK) on a fresh device, show their root starter node
+      return updateGenerations([
+        {
+          ...JUST_ME_TEMPLATE[0],
+          id: 'me',
+          name: active.name,
+          gender: active.gender || 'male',
+          photo: active.photo,
+          birthYear: active.birthYear || '1998',
+          relationToMe: 'Me'
+        }
+      ], 'me');
     }
     // Check legacy storage
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed) && parsed.length > 0 && !isAlexDemoTree(parsed)) {
           return updateGenerations(parsed, 'me');
         }
       }
@@ -86,31 +103,35 @@ export default function App() {
     if (currentUser) {
       setCloudSyncStatus('syncing');
       fetchTreeFromBackend().then((remoteTree) => {
-        const localTree = getUserTree(currentUser.id);
-        const currentLocal = (localTree && localTree.length > 0) ? localTree : members;
+        const realLocal = findRealUserTree(currentUser, STORAGE_KEY);
         const remoteMembers = remoteTree?.members || [];
+        const isRemoteReal = remoteMembers.length > 1 && !isAlexDemoTree(remoteMembers);
 
-        // Protection 1: If current device (e.g. laptop) has a populated tree with > 1 member,
-        // but MongoDB Atlas has only empty/starter (<= 1 member), DO NOT overwrite local data!
-        // Instead, upload the laptop tree to MongoDB Atlas!
-        if (currentLocal && currentLocal.length > 1 && remoteMembers.length <= 1) {
-          console.log(`Preserving & pushing local family tree (${currentLocal.length} members) to MongoDB Atlas...`);
-          setMembers(currentLocal);
-          syncTreeToBackend(currentLocal, currentUser.treeName).then((res) => {
-            if (res?.success) setCloudSyncStatus('synced');
-          });
-        }
-        // Protection 2: If remote cloud tree has multiple members, apply to this device
-        else if (remoteMembers.length > 1) {
+        // Case 1: Remote MongoDB has the real family tree (e.g. pushed from laptop)
+        if (isRemoteReal) {
           setMembers(remoteMembers);
           saveUserTree(currentUser.id, remoteMembers);
           setCloudSyncStatus('synced');
           if (remoteTree.treeName && remoteTree.treeName !== currentUser.treeName) {
             setCurrentUser(prev => prev ? { ...prev, treeName: remoteTree.treeName } : prev);
           }
+          return;
         }
-        // Protection 3: Remote has 1 member, local has <= 1 member
-        else if (remoteMembers.length > 0) {
+
+        // Case 2: This device (e.g. laptop) has the real user-edited tree (HARO KK, etc.)
+        // and MongoDB only has empty/starter (<= 1)
+        if (realLocal && realLocal.length > 1) {
+          console.log(`Preserving & pushing local family tree (${realLocal.length} members) to MongoDB Atlas...`);
+          setMembers(realLocal);
+          saveUserTree(currentUser.id, realLocal);
+          syncTreeToBackend(realLocal, currentUser.treeName).then((res) => {
+            if (res?.success) setCloudSyncStatus('synced');
+          });
+          return;
+        }
+
+        // Case 3: Remote has starter node, local has no populated tree
+        if (remoteMembers.length > 0) {
           setMembers(remoteMembers);
           saveUserTree(currentUser.id, remoteMembers);
           setCloudSyncStatus('synced');
@@ -167,17 +188,28 @@ export default function App() {
 
     // Check if remote tree exists in MongoDB
     const remote = await fetchTreeFromBackend();
-    const userTree = getUserTree(user.id);
+    const realLocal = findRealUserTree(user, STORAGE_KEY);
     const remoteMembers = remote?.members || [];
+    const isRemoteReal = remoteMembers.length > 1 && !isAlexDemoTree(remoteMembers);
 
-    // If local device already has a populated tree (> 1 member) and cloud only has starter (<= 1)
-    if (userTree && userTree.length > 1 && remoteMembers.length <= 1) {
-      setMembers(userTree);
-      await syncTreeToBackend(userTree, user.treeName);
+    // Case 1: Remote MongoDB has real family tree
+    if (isRemoteReal) {
+      setMembers(remoteMembers);
+      saveUserTree(user.id, remoteMembers);
       setCloudSyncStatus('synced');
       return;
     }
 
+    // Case 2: Local device has the real populated tree (HARO KK, etc.)
+    if (realLocal && realLocal.length > 1) {
+      setMembers(realLocal);
+      saveUserTree(user.id, realLocal);
+      await syncTreeToBackend(realLocal, user.treeName);
+      setCloudSyncStatus('synced');
+      return;
+    }
+
+    // Case 3: Remote has starter node
     if (remoteMembers.length > 0) {
       setMembers(remoteMembers);
       saveUserTree(user.id, remoteMembers);
@@ -185,36 +217,29 @@ export default function App() {
       return;
     }
 
-    const savedLocal = getUserTree(user.id);
-    if (savedLocal && savedLocal.length > 0) {
-      setMembers(savedLocal);
-      syncTreeToBackend(savedLocal, user.treeName);
-      setCloudSyncStatus('synced');
+    if (user.id === DEFAULT_DEMO_USER.id) {
+      const demoTree = updateGenerations(INITIAL_FAMILY_TREE, 'me');
+      setMembers(demoTree);
+      saveUserTree(user.id, demoTree);
+      syncTreeToBackend(demoTree, user.treeName);
     } else {
-      if (user.id === DEFAULT_DEMO_USER.id) {
-        const demoTree = updateGenerations(INITIAL_FAMILY_TREE, 'me');
-        setMembers(demoTree);
-        saveUserTree(user.id, demoTree);
-        syncTreeToBackend(demoTree, user.treeName);
-      } else {
-        const starter = [
-          {
-            ...JUST_ME_TEMPLATE[0],
-            id: 'me',
-            name: user.name,
-            gender: user.gender || 'male',
-            photo: user.photo,
-            birthYear: user.birthYear || '1998',
-            relationToMe: 'Me'
-          }
-        ];
-        const updated = updateGenerations(starter, 'me');
-        setMembers(updated);
-        saveUserTree(user.id, updated);
-        syncTreeToBackend(updated, user.treeName);
-      }
-      setCloudSyncStatus('synced');
+      const starter = [
+        {
+          ...JUST_ME_TEMPLATE[0],
+          id: 'me',
+          name: user.name,
+          gender: user.gender || 'male',
+          photo: user.photo,
+          birthYear: user.birthYear || '1998',
+          relationToMe: 'Me'
+        }
+      ];
+      const updated = updateGenerations(starter, 'me');
+      setMembers(updated);
+      saveUserTree(user.id, updated);
+      syncTreeToBackend(updated, user.treeName);
     }
+    setCloudSyncStatus('synced');
   };
 
   // Handle user logout

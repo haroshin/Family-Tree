@@ -305,6 +305,53 @@ export const saveUserTree = (userId, members) => {
   }
 };
 
+// Check if tree is just the default demo placeholder
+export const isAlexDemoTree = (tree) => {
+  if (!Array.isArray(tree) || tree.length === 0) return false;
+  return tree.some(m => m.name === 'Alex Morgan' || m.name === 'Arthur Morgan');
+};
+
+// Smart lookup for a real user-edited tree saved on this device
+export const findRealUserTree = (user, legacyKey = 'ancestry_family_tree_v1') => {
+  if (!user) return null;
+
+  // 1. Check user-specific tree key
+  const userTree = getUserTree(user.id);
+  if (userTree && Array.isArray(userTree) && userTree.length > 0) {
+    if (user.id === DEFAULT_DEMO_USER.id || !isAlexDemoTree(userTree)) {
+      return userTree;
+    }
+  }
+
+  // 2. Check legacy storage key (where laptop edits were saved before login)
+  try {
+    const rawLegacy = localStorage.getItem(legacyKey);
+    if (rawLegacy) {
+      const parsed = JSON.parse(rawLegacy);
+      if (Array.isArray(parsed) && parsed.length > 0 && !isAlexDemoTree(parsed)) {
+        return updateGenerations(parsed, 'me');
+      }
+    }
+  } catch (e) {
+    console.warn('Legacy tree parse error:', e);
+  }
+
+  // 3. Check if stored under demo user key while user was editing locally
+  try {
+    const rawDemo = localStorage.getItem('ancestry_tree_user_user_alex_morgan');
+    if (rawDemo) {
+      const parsed = JSON.parse(rawDemo);
+      if (Array.isArray(parsed) && parsed.length > 0 && !isAlexDemoTree(parsed)) {
+        return updateGenerations(parsed, 'me');
+      }
+    }
+  } catch (e) {
+    console.warn('Demo key tree parse error:', e);
+  }
+
+  return null;
+};
+
 // Ensure active JWT token exists by auto-handshaking with the backend if needed
 export const ensureAuthToken = async (activeUser) => {
   let token = getAuthToken();
