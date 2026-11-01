@@ -1,6 +1,17 @@
 // API Service connecting the Frontend to Express & MongoDB Backend
-const RAW_API_BASE = import.meta.env.VITE_API_URL || '/api';
-const API_BASE = RAW_API_BASE.endsWith('/') ? RAW_API_BASE.slice(0, -1) : RAW_API_BASE;
+const resolveApiBase = () => {
+  if (import.meta.env.VITE_API_URL) {
+    const raw = import.meta.env.VITE_API_URL;
+    return raw.endsWith('/') ? raw.slice(0, -1) : raw;
+  }
+  // When running on remote production (e.g. Vercel), direct requests to the live Render backend
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return 'https://family-tree-6fit.onrender.com/api';
+  }
+  return '/api';
+};
+
+const API_BASE = resolveApiBase();
 const TOKEN_KEY = 'ancestry_auth_token_v1';
 
 export const getAuthToken = () => {

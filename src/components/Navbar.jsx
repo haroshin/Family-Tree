@@ -101,17 +101,17 @@ export default function Navbar({
       <div className="w-full px-3 sm:px-5 lg:px-6 border-b border-[#2d4734]/60">
         <div className="flex items-center justify-between h-14 gap-3">
           
-          {/* LEFT: Hogwarts Crest + EDITABLE Tapestry Title */}
-          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          {/* LEFT: Crest + EDITABLE Tapestry Title (Full width on left) */}
+          <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0 pr-2">
             <div 
-              className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-[#1a472a] via-[#102a1b] to-[#07130c] border-2 border-[#d4af37] shadow-[0_0_12px_rgba(212,175,55,0.4)] cursor-pointer shrink-0 hover:scale-105 transition-transform"
+              className="relative flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-[#1a472a] via-[#102a1b] to-[#07130c] border border-[#d4af37] shadow-[0_0_10px_rgba(212,175,55,0.3)] cursor-pointer shrink-0 hover:scale-105 transition-transform"
               onClick={() => setActiveView('vintagetree')}
               title="Family Tree"
             >
-              <Sparkles className="w-4 h-4 text-amber-300" />
+              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
             </div>
 
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               {isEditingTitle ? (
                 /* Inline Edit Title Form */
                 <form onSubmit={handleSaveTitle} className="flex items-center gap-1.5 py-0.5">
@@ -120,7 +120,7 @@ export default function Navbar({
                     autoFocus
                     value={editedTitle}
                     onChange={(e) => setEditedTitle(e.target.value)}
-                    className="bg-[#08110b] border-2 border-[#d4af37] rounded-lg px-2 py-0.5 text-xs sm:text-sm font-cinzel-dec font-bold text-[#fef08a] focus:outline-none focus:ring-2 focus:ring-[#f5d77f] w-36 xs:w-48 sm:w-80 max-w-[50vw] shadow-inner"
+                    className="bg-[#08110b] border-2 border-[#d4af37] rounded-lg px-2.5 py-0.5 text-xs sm:text-sm font-cinzel-dec font-bold text-[#fef08a] focus:outline-none focus:ring-2 focus:ring-[#f5d77f] w-full max-w-[260px] shadow-inner"
                     placeholder="My Family Tree..."
                   />
                   <button
@@ -144,7 +144,7 @@ export default function Navbar({
                 <div className="flex items-center gap-1.5">
                   <span 
                     onClick={handleStartEdit}
-                    className="font-cinzel-dec font-bold text-xs sm:text-base lg:text-lg tracking-wider text-[#fce7a1] hover:text-white cursor-pointer transition-colors max-w-[120px] xs:max-w-[180px] sm:max-w-none truncate drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]"
+                    className="font-cinzel-dec font-bold text-sm sm:text-base lg:text-lg tracking-wider text-[#fce7a1] hover:text-white cursor-pointer transition-colors truncate drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]"
                     title="Click to rename your family tree"
                   >
                     {currentUser?.treeName || 'My Family Tree'}
@@ -173,7 +173,7 @@ export default function Navbar({
             </div>
           </div>
 
-          {/* RIGHT: Actions + USER ACCOUNT & SIGN OUT */}
+          {/* RIGHT: ONLY SEARCH, PROFILE & SIGN OUT */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             
             {/* Mobile Search Toggle Button */}
@@ -186,7 +186,7 @@ export default function Navbar({
               }`}
               title="Search members"
             >
-              <Search className="w-3.5 h-3.5" />
+              <Search className="w-4 h-4" />
             </button>
 
             {/* Desktop Search Input */}
@@ -209,105 +209,25 @@ export default function Navbar({
               )}
             </div>
 
-            {/* + Add Member Button */}
-            <button
-              onClick={() => onAddMember(null)}
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#856322] via-[#a37c2b] to-[#6d511b] hover:from-[#9c7529] hover:to-[#856322] text-[#fff9db] font-serif-vintage font-bold text-xs shadow-[0_2px_10px_rgba(212,175,55,0.25)] border border-[#e5c158] transition-all hover:scale-[1.02] shrink-0"
-              title="Add a new family member"
-            >
-              <Plus className="w-3.5 h-3.5 text-amber-200" />
-              <span className="hidden sm:inline">Add Member</span>
-            </button>
-
-            {/* Export / Import Dropdown */}
-            <div className="relative shrink-0">
-              <button
-                onClick={() => {
-                  setShowExportMenu(!showExportMenu);
-                  setShowUserMenu(false);
-                }}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-[#122319] hover:bg-[#1a3824] text-[#fce7a1] text-xs font-serif-vintage font-bold border border-[#40684c] transition-all shadow-sm"
-                title="Export and import family tree"
-              >
-                <Download className="w-3.5 h-3.5 text-[#d4af37]" />
-                <span className="hidden sm:inline">Export / Import</span>
-              </button>
-
-              {showExportMenu && (
-                <div className="absolute right-0 mt-2 w-60 max-w-[90vw] bg-[#0f1d14] border-2 border-[#8b6b23] rounded-2xl shadow-[0_10px_35px_rgba(0,0,0,0.85)] py-2 z-50 animate-in fade-in">
-                  <div className="px-3 py-1 text-[10px] font-bold text-[#d4af37] uppercase tracking-widest font-cinzel-dec">
-                    Export Tree
-                  </div>
-                  <button
-                    onClick={() => { onExportJSON(); setShowExportMenu(false); }}
-                    className="w-full text-left px-4 py-2 text-xs text-[#fce7a1] hover:bg-[#1a3824] flex items-center gap-2 font-serif-vintage"
-                  >
-                    <Download className="w-3.5 h-3.5 text-[#d4af37]" />
-                    Export as JSON
-                  </button>
-                  <button
-                    onClick={() => { onExportGEDCOM(); setShowExportMenu(false); }}
-                    className="w-full text-left px-4 py-2 text-xs text-[#fce7a1] hover:bg-[#1a3824] flex items-center gap-2 font-serif-vintage"
-                  >
-                    <Scroll className="w-3.5 h-3.5 text-[#d4af37]" />
-                    Export GEDCOM (.ged)
-                  </button>
-                  <button
-                    onClick={() => { onExportImage(); setShowExportMenu(false); }}
-                    className="w-full text-left px-4 py-2 text-xs text-[#fce7a1] hover:bg-[#1a3824] flex items-center gap-2 border-b border-[#2d4734] font-serif-vintage"
-                  >
-                    <Download className="w-3.5 h-3.5 text-[#d4af37]" />
-                    Export as Image (PNG)
-                  </button>
-
-                  <div className="px-3 py-1.5 text-[10px] font-bold text-[#d4af37] uppercase tracking-widest font-cinzel-dec">
-                    Import & Templates
-                  </div>
-                  <label className="w-full text-left px-4 py-2 text-xs text-[#fce7a1] hover:bg-[#1a3824] flex items-center gap-2 cursor-pointer font-serif-vintage">
-                    <Upload className="w-3.5 h-3.5 text-[#d4af37]" />
-                    Import JSON File
-                    <input type="file" accept=".json" onChange={handleFileChange} className="hidden" />
-                  </label>
-                  <button
-                    onClick={() => { onLoadDemo(); setShowExportMenu(false); }}
-                    className="w-full text-left px-4 py-2 text-xs text-[#fce7a1] hover:bg-[#1a3824] flex items-center gap-2 font-serif-vintage"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-[#d4af37]" />
-                    Load 4-Generation Demo Tree
-                  </button>
-                  <button
-                    onClick={() => { onResetTree(); setShowExportMenu(false); }}
-                    className="w-full text-left px-4 py-2 text-xs text-rose-300 hover:bg-rose-950/60 flex items-center gap-2 font-serif-vintage"
-                  >
-                    <RotateCcw className="w-3.5 h-3.5 text-rose-400" />
-                    Reset Tree (Just Me)
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* USER PROFILE PILL & SIGN OUT */}
+            {/* USER PROFILE PILL & MENU */}
             {currentUser && (
-              <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 pl-1 border-l border-[#3a5a40]/60">
+              <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                 
                 {/* User Profile Pill */}
                 <div className="relative shrink-0">
                   <button
-                    onClick={() => {
-                      setShowUserMenu(!showUserMenu);
-                      setShowExportMenu(false);
-                    }}
-                    className="flex items-center gap-1.5 p-1 rounded-xl bg-[#122319] hover:bg-[#1a3824] text-[#fce7a1] border border-[#40684c] transition-all hover:border-[#d4af37] shadow-sm"
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="flex items-center gap-1.5 p-1 rounded-xl bg-[#122319] hover:bg-[#1a3824] text-[#fce7a1] border border-[#40684c] transition-all hover:border-[#d4af37] shadow-sm cursor-pointer"
                     title={`Account: ${currentUser.name}`}
                   >
                     <div className="relative shrink-0">
                       <img
                         src={currentUser.photo}
                         alt={currentUser.name}
-                        className="w-7 h-7 rounded-full object-cover border-2 border-[#d4af37] shrink-0"
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border-2 border-[#d4af37] shrink-0"
                       />
                       {currentUser.authProvider === 'google' && (
-                        <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-white rounded-full flex items-center justify-center shadow-xs">
+                        <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-white rounded-full flex items-center justify-center shadow-xs">
                           <svg className="w-2 h-2" viewBox="0 0 24 24">
                             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
@@ -323,9 +243,10 @@ export default function Navbar({
                     <ChevronDown className="w-3 h-3 text-[#d4af37]" />
                   </button>
 
-                  {/* User Dropdown */}
+                  {/* Comprehensive User Menu */}
                   {showUserMenu && (
-                    <div className="absolute right-0 mt-2 w-64 bg-[#0f1d14] border-2 border-[#8b6b23] rounded-2xl shadow-2xl p-3 z-50 animate-in fade-in">
+                    <div className="absolute right-0 mt-2 w-72 max-w-[92vw] bg-[#0f1d14] border-2 border-[#8b6b23] rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.9)] p-3 z-50 animate-in fade-in">
+                      {/* User Info Header */}
                       <div className="flex items-center gap-3 pb-3 border-b border-[#2d4734]">
                         <div className="relative shrink-0">
                           <img
@@ -358,6 +279,83 @@ export default function Navbar({
                         </div>
                       </div>
 
+                      {/* Tree Actions Section */}
+                      <div className="py-2 border-b border-[#2d4734] space-y-1">
+                        <div className="px-3 py-1 text-[10px] font-bold text-[#d4af37] uppercase tracking-widest font-cinzel-dec">
+                          Tree Actions
+                        </div>
+                        <button
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            onAddMember(null);
+                          }}
+                          className="w-full text-left px-3 py-2 rounded-xl text-xs text-[#fef08a] bg-[#162e1e] hover:bg-[#1f422b] flex items-center gap-2.5 font-serif-vintage font-bold border border-[#d4af37]/40 shadow-xs transition-all"
+                        >
+                          <Plus className="w-4 h-4 text-amber-300" />
+                          <span>+ Add Family Member</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            onExportImage();
+                          }}
+                          className="w-full text-left px-3 py-1.5 rounded-xl text-xs text-[#fce7a1] hover:bg-[#1a3824] flex items-center gap-2.5 font-serif-vintage transition-all"
+                        >
+                          <Download className="w-3.5 h-3.5 text-[#d4af37]" />
+                          <span>Export as Image (PNG)</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            onExportJSON();
+                          }}
+                          className="w-full text-left px-3 py-1.5 rounded-xl text-xs text-[#fce7a1] hover:bg-[#1a3824] flex items-center gap-2.5 font-serif-vintage transition-all"
+                        >
+                          <Download className="w-3.5 h-3.5 text-[#d4af37]" />
+                          <span>Export as JSON</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            onExportGEDCOM();
+                          }}
+                          className="w-full text-left px-3 py-1.5 rounded-xl text-xs text-[#fce7a1] hover:bg-[#1a3824] flex items-center gap-2.5 font-serif-vintage transition-all"
+                        >
+                          <Scroll className="w-3.5 h-3.5 text-[#d4af37]" />
+                          <span>Export GEDCOM (.ged)</span>
+                        </button>
+                        <label className="w-full text-left px-3 py-1.5 rounded-xl text-xs text-[#fce7a1] hover:bg-[#1a3824] flex items-center gap-2.5 cursor-pointer font-serif-vintage transition-all">
+                          <Upload className="w-3.5 h-3.5 text-[#d4af37]" />
+                          <span>Import JSON Backup</span>
+                          <input type="file" accept=".json" onChange={handleFileChange} className="hidden" />
+                        </label>
+                      </div>
+
+                      {/* Templates & Demo */}
+                      <div className="py-2 border-b border-[#2d4734] space-y-1">
+                        <button
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            onLoadDemo();
+                          }}
+                          className="w-full text-left px-3 py-1.5 rounded-xl text-xs text-[#fce7a1] hover:bg-[#1a3824] flex items-center gap-2.5 font-serif-vintage transition-all"
+                        >
+                          <Sparkles className="w-3.5 h-3.5 text-[#d4af37]" />
+                          <span>Load 4-Gen Demo Tree</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            onResetTree();
+                          }}
+                          className="w-full text-left px-3 py-1.5 rounded-xl text-xs text-rose-300 hover:bg-rose-950/60 flex items-center gap-2.5 font-serif-vintage transition-all"
+                        >
+                          <RotateCcw className="w-3.5 h-3.5 text-rose-400" />
+                          <span>Reset Tree (Just Me)</span>
+                        </button>
+                      </div>
+
+                      {/* Sign Out */}
                       <div className="pt-2">
                         <button
                           onClick={() => {

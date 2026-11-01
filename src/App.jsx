@@ -85,9 +85,13 @@ export default function App() {
       fetchTreeFromBackend().then((remoteTree) => {
         if (remoteTree?.members && remoteTree.members.length > 0) {
           setMembers(remoteTree.members);
+          saveUserTree(currentUser.id, remoteTree.members);
           if (remoteTree.treeName && remoteTree.treeName !== currentUser.treeName) {
             setCurrentUser(prev => prev ? { ...prev, treeName: remoteTree.treeName } : prev);
           }
+        } else if (members && members.length > 1) {
+          // If remote cloud tree is empty, push existing device members to MongoDB
+          syncTreeToBackend(members, currentUser.treeName);
         }
       });
     }
