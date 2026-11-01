@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getGoogleClientId, parseJwt, triggerGoogleOAuthPopup } from '../utils/googleAuth';
 import GoogleOAuthSetupModal from './GoogleOAuthSetupModal';
-import { Settings, ShieldCheck, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
 function GoogleOAuthButton({ onSuccess, onError }) {
   const [clientId, setClientId] = useState(getGoogleClientId());
@@ -139,21 +139,6 @@ function GoogleOAuthButton({ onSuccess, onError }) {
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
               </svg>
               <span>{authLoading ? 'Connecting to Google...' : 'Continue with Google'}</span>
-            </button>
-          </div>
-
-          <div className="flex items-center justify-between px-1 text-[10px] text-amber-400/60 font-serif-vintage">
-            <span className="flex items-center gap-1 text-emerald-400/80">
-              <ShieldCheck className="w-3 h-3" />
-              <span>Real Google OAuth Connected</span>
-            </span>
-            <button
-              type="button"
-              onClick={() => setIsSetupOpen(true)}
-              className="hover:text-amber-200 underline flex items-center gap-1"
-            >
-              <Settings className="w-2.5 h-2.5" />
-              <span>Change Client ID</span>
             </button>
           </div>
         </div>

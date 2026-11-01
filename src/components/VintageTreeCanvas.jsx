@@ -247,6 +247,87 @@ export default function VintageTreeCanvas({
     window.addEventListener('mouseup', up);
   };
 
+  // Touch Gestures: 1-finger drag-to-pan & 2-finger pinch-to-zoom for mobile phones
+  const touchState = useRef({
+    mode: null,
+    startX: 0,
+    startY: 0,
+    scrollLeft: 0,
+    scrollTop: 0,
+    startDist: 0,
+    startZoom: 1,
+    midX: 0,
+    midY: 0
+  });
+
+  const handleTouchStart = (e) => {
+    if (e.target.closest('[data-node],[data-ui]')) return;
+    const vp = viewportRef.current;
+    if (!vp) return;
+
+    if (e.touches.length === 1) {
+      const t = e.touches[0];
+      touchState.current = {
+        mode: 'pan',
+        startX: t.clientX,
+        startY: t.clientY,
+        scrollLeft: vp.scrollLeft,
+        scrollTop: vp.scrollTop,
+        startDist: 0,
+        startZoom: zoomRef.current,
+        midX: t.clientX,
+        midY: t.clientY
+      };
+      setDragging(true);
+      setHoveredId(null);
+    } else if (e.touches.length === 2) {
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+      const mx = (t1.clientX + t2.clientX) / 2;
+      const my = (t1.clientY + t2.clientY) / 2;
+      touchState.current = {
+        mode: 'pinch',
+        startX: mx,
+        startY: my,
+        scrollLeft: vp.scrollLeft,
+        scrollTop: vp.scrollTop,
+        startDist: dist,
+        startZoom: zoomRef.current,
+        midX: mx,
+        midY: my
+      };
+      setDragging(true);
+      setHoveredId(null);
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    const s = touchState.current;
+    const vp = viewportRef.current;
+    if (!s.mode || !vp) return;
+
+    if (s.mode === 'pan' && e.touches.length === 1) {
+      const t = e.touches[0];
+      vp.scrollLeft = s.scrollLeft - (t.clientX - s.startX);
+      vp.scrollTop = s.scrollTop - (t.clientY - s.startY);
+    } else if (s.mode === 'pinch' && e.touches.length === 2) {
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+      if (s.startDist > 0) {
+        const factor = dist / s.startDist;
+        const newZoom = s.startZoom * factor;
+        zoomTo(newZoom, s.midX, s.midY);
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    touchState.current.mode = null;
+    setDragging(false);
+  };
+
   const handleEnter = (id) => {
     if (drag.current) return;
     clearTimeout(hoverTimer.current);
@@ -285,6 +366,10 @@ export default function VintageTreeCanvas({
       <div
         ref={viewportRef}
         onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
         onContextMenu={(e) => {
           if (onOpenContextMenu) {
             e.preventDefault();
@@ -762,7 +847,7 @@ export default function VintageTreeCanvas({
         <p className="text-[11px] text-amber-200/75 italic">Hover a person for details · click empty slots to add a parent</p>
       </div>
 
-      <div data-ui className="absolute top-4 right-5 z-30 flex flex-col gap-1.5 bg-[#2b1c0d]/90 p-1.5 rounded-xl border-2 border-[#7a4f29] shadow-xl">
+      <div data-ui className="absolute top-2 right-2 sm:top-4 sm:right-5 z-30 flex flex-col gap-1 sm:gap-1.5 bg-[#2b1c0d]/90 p-1 sm:p-1.5 rounded-xl border-2 border-[#7a4f29] shadow-xl">
         <button onClick={() => zoomTo(zoomRef.current * 1.2)} className="tree-ctrl" title="Zoom in">
           <ZoomIn className="w-5 h-5" />
         </button>

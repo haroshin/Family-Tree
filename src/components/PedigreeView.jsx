@@ -20,22 +20,22 @@ export default function PedigreeView({ members, onSelectMember, theme }) {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] p-6 md:p-8 bg-[#070d09] tapestry-canvas text-amber-100 overflow-x-auto">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-[calc(100vh-4rem)] p-3 sm:p-6 md:p-8 bg-[#070d09] tapestry-canvas text-amber-100 overflow-x-auto touch-scroll">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
         
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl bg-[#0b160f] border-2 border-[#d4af37]/40 shadow-2xl tapestry-burnt-edges">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-[#0b160f] border-2 border-[#d4af37]/40 shadow-2xl tapestry-burnt-edges">
           <div>
-            <h2 className="text-xl font-['Cinzel_Decorative',serif] font-bold text-[#fef08a] flex items-center gap-2">
-              <span className="text-xl">📜</span>
+            <h2 className="text-lg sm:text-xl font-['Cinzel_Decorative',serif] font-bold text-[#fef08a] flex items-center gap-2">
+              <span className="text-lg sm:text-xl">📜</span>
               Pedigree View
             </h2>
-            <p className="text-xs text-emerald-300/80 font-serif mt-1">
+            <p className="text-[11px] sm:text-xs text-emerald-300/80 font-serif mt-0.5">
               Family tree organized by generation columns
             </p>
           </div>
           <div className="flex items-center gap-3 text-xs font-serif text-amber-200">
-            <span className="px-3.5 py-1.5 rounded-full bg-[#07100a] border border-[#d4af37]/40 text-[#fef08a]">
+            <span className="px-3 py-1 rounded-full bg-[#07100a] border border-[#d4af37]/40 text-[#fef08a]">
               Generations: <strong className="text-[#fef08a] font-bold">{maxGen + 1} Generations</strong>
             </span>
           </div>

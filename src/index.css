@@ -30,7 +30,28 @@
     user-select: none;
     background-color: var(--tapestry-bg);
     color: #f7e7c4;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
+
+  input, textarea, select {
+    user-select: text;
+    -webkit-user-select: text;
+  }
+}
+
+/* Mobile Safe Area Padding Utilities */
+.safe-pb {
+  padding-bottom: env(safe-area-inset-bottom, 12px);
+}
+.safe-pt {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* Touch momentum scrolling */
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
 .font-serif-vintage {

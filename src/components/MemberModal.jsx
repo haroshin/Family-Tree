@@ -195,37 +195,37 @@ export default function MemberModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-[#0b160f] border-2 border-[#d4af37]/50 rounded-3xl shadow-[0_0_60px_rgba(0,0,0,0.9),0_0_30px_rgba(212,175,55,0.2)] overflow-hidden my-8 tapestry-burnt-edges">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
+      <div className="relative w-full max-w-2xl bg-[#0b160f] border-2 border-[#d4af37]/50 rounded-2xl sm:rounded-3xl shadow-[0_0_60px_rgba(0,0,0,0.9),0_0_30px_rgba(212,175,55,0.2)] overflow-hidden my-2 sm:my-8 tapestry-burnt-edges">
         
         {/* Modal Header */}
-        <div className="px-6 py-5 bg-gradient-to-r from-[#070e09] via-[#12281a] to-[#070e09] border-b border-[#24422e] flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#740001]/40 border border-[#d4af37]/50 flex items-center justify-center text-[#fef08a] shadow-inner text-base">
+        <div className="px-4 sm:px-6 py-3.5 sm:py-5 bg-gradient-to-r from-[#070e09] via-[#12281a] to-[#070e09] border-b border-[#24422e] flex items-center justify-between">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-[#740001]/40 border border-[#d4af37]/50 flex items-center justify-center text-[#fef08a] shadow-inner text-sm sm:text-base">
               📜
             </div>
             <div>
-              <h2 className="font-['Cinzel_Decorative',serif] font-bold text-lg text-[#fef08a] tracking-wide">
+              <h2 className="font-['Cinzel_Decorative',serif] font-bold text-base sm:text-lg text-[#fef08a] tracking-wide">
                 {initialMember ? 'Edit Member Details' : targetMember ? `Add ${relationType || 'Relative'} for ${targetMember.name}` : 'Add Family Member'}
               </h2>
-              <p className="text-xs text-emerald-300/80 font-serif">
+              <p className="text-[11px] sm:text-xs text-emerald-300/80 font-serif">
                 Add or update details for this family member
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-[#060c08] hover:bg-[#740001]/60 text-amber-200/70 hover:text-[#fef08a] border border-[#2b4c34] transition-colors"
+            className="p-1.5 sm:p-2 rounded-xl bg-[#060c08] hover:bg-[#740001]/60 text-amber-200/70 hover:text-[#fef08a] border border-[#2b4c34] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-6 max-h-[80vh] overflow-y-auto text-amber-100">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-h-[85vh] sm:max-h-[80vh] overflow-y-auto touch-scroll text-amber-100">
           
           {/* Avatar & Basic Info Header */}
-          <div className="flex flex-col sm:flex-row items-center gap-6 p-4 rounded-2xl bg-[#07100a] border border-[#233f2c]">
+          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 p-3 sm:p-4 rounded-2xl bg-[#07100a] border border-[#233f2c]">
             <div className="flex flex-col items-center gap-2 shrink-0">
               <div 
                 className="relative group cursor-pointer" 

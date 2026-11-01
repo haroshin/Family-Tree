@@ -51,11 +51,11 @@ export default function ProfileModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-[#0b160f] border-2 border-[#d4af37]/50 rounded-3xl shadow-[0_0_60px_rgba(0,0,0,0.9),0_0_30px_rgba(212,175,55,0.2)] overflow-hidden my-8 tapestry-burnt-edges">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
+      <div className="relative w-full max-w-2xl bg-[#0b160f] border-2 border-[#d4af37]/50 rounded-2xl sm:rounded-3xl shadow-[0_0_60px_rgba(0,0,0,0.9),0_0_30px_rgba(212,175,55,0.2)] overflow-hidden my-2 sm:my-8 tapestry-burnt-edges">
         
         {/* Profile Cover Banner - Enchanted Velvet & Constellations */}
-        <div className="h-32 bg-gradient-to-r from-[#070e09] via-[#152e1c] to-[#070e09] border-b border-[#24422e] relative overflow-hidden">
+        <div className="h-28 sm:h-32 bg-gradient-to-r from-[#070e09] via-[#152e1c] to-[#070e09] border-b border-[#24422e] relative overflow-hidden">
           <div className="absolute inset-0 opacity-20 pointer-events-none" style={{
             backgroundImage: `radial-gradient(circle at 2px 2px, rgba(212,175,55,0.6) 1px, transparent 0)`,
             backgroundSize: '24px 24px'
@@ -65,14 +65,14 @@ export default function ProfileModal({
           </div>
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-xl bg-black/60 hover:bg-[#740001] text-amber-200 hover:text-white backdrop-blur-md border border-[#2b4c34] transition-colors z-10"
+            className="absolute top-3 right-3 sm:top-4 sm:right-4 p-2 rounded-xl bg-black/60 hover:bg-[#740001] text-amber-200 hover:text-white backdrop-blur-md border border-[#2b4c34] transition-colors z-10"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Avatar & Header Profile Info */}
-        <div className="px-6 pb-6 pt-0 relative text-amber-100">
+        <div className="px-4 sm:px-6 pb-6 pt-0 relative text-amber-100">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-16 mb-4">
             
             <div className="relative">

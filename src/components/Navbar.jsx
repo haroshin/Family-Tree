@@ -45,6 +45,7 @@ export default function Navbar({
 }) {
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
 
   // Editable Tree Name State
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -119,12 +120,12 @@ export default function Navbar({
                     autoFocus
                     value={editedTitle}
                     onChange={(e) => setEditedTitle(e.target.value)}
-                    className="bg-[#08110b] border-2 border-[#d4af37] rounded-lg px-2.5 py-0.5 text-xs sm:text-sm font-cinzel-dec font-bold text-[#fef08a] focus:outline-none focus:ring-2 focus:ring-[#f5d77f] w-48 sm:w-80 shadow-inner"
+                    className="bg-[#08110b] border-2 border-[#d4af37] rounded-lg px-2 py-0.5 text-xs sm:text-sm font-cinzel-dec font-bold text-[#fef08a] focus:outline-none focus:ring-2 focus:ring-[#f5d77f] w-36 xs:w-48 sm:w-80 max-w-[50vw] shadow-inner"
                     placeholder="My Family Tree..."
                   />
                   <button
                     type="submit"
-                    className="p-1 rounded-lg bg-emerald-800 hover:bg-emerald-700 text-white shadow border border-emerald-500 transition-all"
+                    className="p-1 rounded-lg bg-emerald-800 hover:bg-emerald-700 text-white shadow border border-emerald-500 transition-all shrink-0"
                     title="Save title"
                   >
                     <Check className="w-3.5 h-3.5" />
@@ -132,7 +133,7 @@ export default function Navbar({
                   <button
                     type="button"
                     onClick={() => setIsEditingTitle(false)}
-                    className="p-1 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 transition-all border border-stone-700"
+                    className="p-1 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 transition-all border border-stone-700 shrink-0"
                     title="Cancel"
                   >
                     <X className="w-3.5 h-3.5" />
@@ -143,7 +144,7 @@ export default function Navbar({
                 <div className="flex items-center gap-1.5">
                   <span 
                     onClick={handleStartEdit}
-                    className="font-cinzel-dec font-bold text-sm sm:text-base lg:text-lg tracking-wider text-[#fce7a1] hover:text-white cursor-pointer transition-colors truncate drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]"
+                    className="font-cinzel-dec font-bold text-xs sm:text-base lg:text-lg tracking-wider text-[#fce7a1] hover:text-white cursor-pointer transition-colors max-w-[120px] xs:max-w-[180px] sm:max-w-none truncate drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]"
                     title="Click to rename your family tree"
                   >
                     {currentUser?.treeName || 'My Family Tree'}
@@ -175,7 +176,20 @@ export default function Navbar({
           {/* RIGHT: Actions + USER ACCOUNT & SIGN OUT */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             
-            {/* Search Input */}
+            {/* Mobile Search Toggle Button */}
+            <button
+              onClick={() => setShowMobileSearch(!showMobileSearch)}
+              className={`md:hidden p-2 rounded-xl transition-all border shrink-0 ${
+                showMobileSearch || searchQuery
+                  ? 'bg-amber-900/60 text-[#fef08a] border-amber-500'
+                  : 'bg-[#122319] hover:bg-[#1a3824] text-[#d4af37] border-[#40684c]'
+              }`}
+              title="Search members"
+            >
+              <Search className="w-3.5 h-3.5" />
+            </button>
+
+            {/* Desktop Search Input */}
             <div className="relative hidden md:block w-36 lg:w-44">
               <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 text-[#d4af37]/70" />
               <input
@@ -220,7 +234,7 @@ export default function Navbar({
               </button>
 
               {showExportMenu && (
-                <div className="absolute right-0 mt-2 w-60 bg-[#0f1d14] border-2 border-[#8b6b23] rounded-2xl shadow-[0_10px_35px_rgba(0,0,0,0.85)] py-2 z-50 animate-in fade-in">
+                <div className="absolute right-0 mt-2 w-60 max-w-[90vw] bg-[#0f1d14] border-2 border-[#8b6b23] rounded-2xl shadow-[0_10px_35px_rgba(0,0,0,0.85)] py-2 z-50 animate-in fade-in">
                   <div className="px-3 py-1 text-[10px] font-bold text-[#d4af37] uppercase tracking-widest font-cinzel-dec">
                     Export Tree
                   </div>
@@ -378,76 +392,105 @@ export default function Navbar({
         </div>
       </div>
 
+      {/* Mobile Expandable Search Bar */}
+      {(showMobileSearch || searchQuery) && (
+        <div className="md:hidden px-3 py-2 bg-[#08130c] border-b border-[#2d4734] animate-in slide-in-from-top-1 duration-150">
+          <div className="relative w-full">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#d4af37]" />
+            <input
+              type="text"
+              placeholder="Search members by name, relation, birthplace..."
+              autoFocus={showMobileSearch}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-[#122319] border border-[#d4af37]/60 text-amber-100 text-xs rounded-xl pl-9 pr-8 py-2 focus:outline-none focus:ring-1 focus:ring-[#d4af37] font-serif-vintage placeholder:text-amber-300/40"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-amber-400 hover:text-white text-xs p-1"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* ================= TIER 2: WORKSPACE TOOLBAR (Views & Filters) ================= */}
-      <div className="w-full px-3 sm:px-5 lg:px-6 bg-[#071109]/95 border-t border-[#233827]/70 py-1.5">
-        <div className="flex items-center justify-between gap-3 overflow-x-auto no-scrollbar">
+      <div className="w-full px-2 sm:px-5 lg:px-6 bg-[#071109]/95 border-t border-[#233827]/70 py-1.5">
+        <div className="flex items-center justify-between gap-2 sm:gap-3 overflow-x-auto touch-scroll no-scrollbar">
           
           {/* LEFT: 6 View Modes Segmented Control */}
-          <nav className="flex items-center gap-1 bg-[#0d1c12] p-1 rounded-xl border border-[#26442f] shrink-0">
+          <nav className="flex items-center gap-0.5 sm:gap-1 bg-[#0d1c12] p-1 rounded-xl border border-[#26442f] shrink-0">
             <button
               onClick={() => setActiveView('vintagetree')}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-serif-vintage font-bold transition-all whitespace-nowrap ${
+              className={`flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg text-xs font-serif-vintage font-bold transition-all whitespace-nowrap min-h-[34px] sm:min-h-0 ${
                 activeView === 'vintagetree'
                   ? 'bg-gradient-to-r from-[#856322] to-[#594215] text-[#fef9c3] shadow-md border border-[#d4af37]'
                   : 'text-[#d4af37]/70 hover:text-[#fef08a] hover:bg-[#1a3824]'
               }`}
             >
-              <Trees className="w-3.5 h-3.5 text-[#f5d77f]" />
-              Tree View
+              <Trees className="w-3.5 h-3.5 text-[#f5d77f] shrink-0" />
+              <span className="hidden sm:inline">Tree View</span>
+              <span className="sm:hidden">Tree</span>
             </button>
             <button
               onClick={() => setActiveView('tree')}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-serif-vintage font-bold transition-all whitespace-nowrap ${
+              className={`flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg text-xs font-serif-vintage font-bold transition-all whitespace-nowrap min-h-[34px] sm:min-h-0 ${
                 activeView === 'tree'
                   ? 'bg-gradient-to-r from-[#856322] to-[#594215] text-[#fef9c3] shadow-md border border-[#d4af37]'
                   : 'text-[#d4af37]/70 hover:text-[#fef08a] hover:bg-[#1a3824]'
               }`}
             >
-              <GitFork className="w-3.5 h-3.5 rotate-180" />
-              Chart View
+              <GitFork className="w-3.5 h-3.5 rotate-180 shrink-0" />
+              <span className="hidden sm:inline">Chart View</span>
+              <span className="sm:hidden">Chart</span>
             </button>
             <button
               onClick={() => setActiveView('pedigree')}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-serif-vintage font-bold transition-all whitespace-nowrap ${
+              className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-lg text-xs font-serif-vintage font-bold transition-all whitespace-nowrap min-h-[34px] sm:min-h-0 ${
                 activeView === 'pedigree'
                   ? 'bg-gradient-to-r from-[#856322] to-[#594215] text-[#fef9c3] shadow-md border border-[#d4af37]'
                   : 'text-[#d4af37]/70 hover:text-[#fef08a] hover:bg-[#1a3824]'
               }`}
             >
-              <LayoutGrid className="w-3.5 h-3.5" />
-              Pedigree View
+              <LayoutGrid className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden sm:inline">Pedigree View</span>
+              <span className="sm:hidden">Pedigree</span>
             </button>
             <button
               onClick={() => setActiveView('timeline')}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-serif-vintage font-bold transition-all whitespace-nowrap ${
+              className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-lg text-xs font-serif-vintage font-bold transition-all whitespace-nowrap min-h-[34px] sm:min-h-0 ${
                 activeView === 'timeline'
                   ? 'bg-gradient-to-r from-[#856322] to-[#594215] text-[#fef9c3] shadow-md border border-[#d4af37]'
                   : 'text-[#d4af37]/70 hover:text-[#fef08a] hover:bg-[#1a3824]'
               }`}
             >
-              <Clock className="w-3.5 h-3.5" />
+              <Clock className="w-3.5 h-3.5 shrink-0" />
               Timeline
             </button>
             <button
               onClick={() => setActiveView('analytics')}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-serif-vintage font-bold transition-all whitespace-nowrap ${
+              className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-lg text-xs font-serif-vintage font-bold transition-all whitespace-nowrap min-h-[34px] sm:min-h-0 ${
                 activeView === 'analytics'
                   ? 'bg-gradient-to-r from-[#856322] to-[#594215] text-[#fef9c3] shadow-md border border-[#d4af37]'
                   : 'text-[#d4af37]/70 hover:text-[#fef08a] hover:bg-[#1a3824]'
               }`}
             >
-              <BarChart3 className="w-3.5 h-3.5" />
-              Statistics
+              <BarChart3 className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden sm:inline">Statistics</span>
+              <span className="sm:hidden">Stats</span>
             </button>
             <button
               onClick={() => setActiveView('directory')}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-serif-vintage font-bold transition-all whitespace-nowrap ${
+              className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-lg text-xs font-serif-vintage font-bold transition-all whitespace-nowrap min-h-[34px] sm:min-h-0 ${
                 activeView === 'directory'
                   ? 'bg-gradient-to-r from-[#856322] to-[#594215] text-[#fef9c3] shadow-md border border-[#d4af37]'
                   : 'text-[#d4af37]/70 hover:text-[#fef08a] hover:bg-[#1a3824]'
               }`}
             >
-              <Users className="w-3.5 h-3.5" />
+              <Users className="w-3.5 h-3.5 shrink-0" />
               Directory
             </button>
           </nav>

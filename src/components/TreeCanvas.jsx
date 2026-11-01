@@ -93,6 +93,76 @@ export default function TreeCanvas({
     setIsDragging(false);
   };
 
+  // Touch Gestures: 1-finger drag-to-pan & 2-finger pinch zoom for mobile
+  const touchState = useRef({
+    mode: null,
+    startX: 0,
+    startY: 0,
+    startPanX: 0,
+    startPanY: 0,
+    startDist: 0,
+    startZoom: 1
+  });
+
+  const handleTouchStart = (e) => {
+    if (e.target.closest('.node-card') || e.target.closest('.canvas-control')) return;
+
+    if (e.touches.length === 1) {
+      const t = e.touches[0];
+      touchState.current = {
+        mode: 'pan',
+        startX: t.clientX,
+        startY: t.clientY,
+        startPanX: pan.x,
+        startPanY: pan.y,
+        startDist: 0,
+        startZoom: zoom
+      };
+      setIsDragging(true);
+    } else if (e.touches.length === 2) {
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+      touchState.current = {
+        mode: 'pinch',
+        startX: (t1.clientX + t2.clientX) / 2,
+        startY: (t1.clientY + t2.clientY) / 2,
+        startPanX: pan.x,
+        startPanY: pan.y,
+        startDist: dist,
+        startZoom: zoom
+      };
+      setIsDragging(true);
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    const s = touchState.current;
+    if (!s.mode) return;
+
+    if (s.mode === 'pan' && e.touches.length === 1) {
+      const t = e.touches[0];
+      setPan({
+        x: s.startPanX + (t.clientX - s.startX),
+        y: s.startPanY + (t.clientY - s.startY)
+      });
+    } else if (s.mode === 'pinch' && e.touches.length === 2) {
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+      if (s.startDist > 0) {
+        const factor = dist / s.startDist;
+        const newZoom = Math.min(Math.max(s.startZoom * factor, 0.4), 2.2);
+        setZoom(newZoom);
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    touchState.current.mode = null;
+    setIsDragging(false);
+  };
+
   const handleResetView = () => {
     setZoom(1);
     setPan({ x: 0, y: 0 });
@@ -121,6 +191,10 @@ export default function TreeCanvas({
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
       onWheel={handleWheel}
       onContextMenu={(e) => {
         if (onOpenContextMenu) {
@@ -141,7 +215,7 @@ export default function TreeCanvas({
       />
 
       {/* Floating Canvas View Controls */}
-      <div className="absolute top-4 right-4 z-30 flex flex-col gap-2 bg-[#0b160f]/90 backdrop-blur-md p-2 rounded-2xl border border-[#d4af37]/40 shadow-2xl canvas-control">
+      <div className="absolute top-2 right-2 sm:top-4 sm:right-4 z-30 flex flex-col gap-1 sm:gap-2 bg-[#0b160f]/90 backdrop-blur-md p-1.5 sm:p-2 rounded-2xl border border-[#d4af37]/40 shadow-2xl canvas-control">
         <button
           onClick={() => setZoom(prev => Math.min(prev + 0.15, 2.0))}
           className="p-2 rounded-xl hover:bg-[#122618] text-amber-200 hover:text-white transition-all"

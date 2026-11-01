@@ -54,6 +54,13 @@ Once deployed, your full application is live at `https://my-family-tree.onrender
 
 If you prefer using Vercel's global edge network for the frontend:
 
+### 🌐 Live Production URLs
+* **Frontend (Vercel):** [https://family-tree-eta-ashen.vercel.app](https://family-tree-eta-ashen.vercel.app)
+* **Backend API (Render):** [https://family-tree-6fit.onrender.com](https://family-tree-6fit.onrender.com)
+* **API Health Check:** [https://family-tree-6fit.onrender.com/api/health](https://family-tree-6fit.onrender.com/api/health)
+
+---
+
 ### Part A: Deploy Backend on Render
 1. In Render, select **New +** → **Web Service** and choose your repo.
 2. Set:

@@ -32,32 +32,32 @@ export default function DirectoryView({
   });
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] p-6 md:p-8 bg-[#070d09] tapestry-canvas text-amber-100">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-[calc(100vh-4rem)] p-3 sm:p-6 md:p-8 bg-[#070d09] tapestry-canvas text-amber-100">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
         
         {/* Header & Filters */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-3xl bg-[#0b160f] border-2 border-[#d4af37]/40 shadow-2xl tapestry-burnt-edges">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-[#0b160f] border-2 border-[#d4af37]/40 shadow-2xl tapestry-burnt-edges">
           <div>
-            <h2 className="text-xl font-['Cinzel_Decorative',serif] font-bold text-[#fef08a] flex items-center gap-2">
-              <span className="text-xl">📜</span>
+            <h2 className="text-lg sm:text-xl font-['Cinzel_Decorative',serif] font-bold text-[#fef08a] flex items-center gap-2">
+              <span className="text-lg sm:text-xl">📜</span>
               Family Directory
             </h2>
-            <p className="text-xs text-emerald-300/80 font-serif mt-1">
+            <p className="text-[11px] sm:text-xs text-emerald-300/80 font-serif mt-0.5">
               Search and filter all members in your family tree
             </p>
           </div>
 
-          <div className="flex items-center gap-3 flex-wrap font-serif">
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap font-serif w-full md:w-auto">
             
             {/* Search Input */}
-            <div className="relative">
+            <div className="relative flex-1 md:flex-initial w-full sm:w-52">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-emerald-500" />
               <input
                 type="text"
-                placeholder="Search name, relation, birthplace..."
+                placeholder="Search members..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-[#050b07] border border-[#274833] text-xs text-amber-100 placeholder:text-emerald-700 rounded-xl pl-9 pr-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#d4af37] focus:border-[#d4af37] w-52"
+                className="bg-[#050b07] border border-[#274833] text-xs text-amber-100 placeholder:text-emerald-700 rounded-xl pl-9 pr-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#d4af37] focus:border-[#d4af37] w-full"
               />
             </div>
 
