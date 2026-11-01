@@ -164,30 +164,20 @@ export default function Navbar({
                 </div>
               )}
 
-              <div className="flex items-center gap-2">
-                <p className="text-[10px] sm:text-[11px] text-[#c7aa60] font-serif-vintage truncate">
-                  {membersCount} Members {currentUser ? `• Owner: ${currentUser.name}` : ''}
-                </p>
-                <button
-                  type="button"
-                  onClick={onManualSync}
-                  className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#0e2417] hover:bg-[#163824] border border-emerald-600/50 hover:border-emerald-400 text-emerald-300 text-[10px] font-sans transition-all cursor-pointer shadow-xs"
-                  title="Click to sync your family tree with MongoDB Cloud"
-                >
-                  <Cloud className={`w-3 h-3 text-emerald-400 ${cloudSyncStatus === 'syncing' ? 'animate-bounce' : ''}`} />
-                  <span>{cloudSyncStatus === 'syncing' ? 'Syncing...' : 'Cloud Synced'}</span>
-                </button>
-              </div>
+              <p className="text-[10px] sm:text-[11px] text-[#c7aa60] font-serif-vintage truncate leading-tight">
+                {membersCount} {membersCount === 1 ? 'Member' : 'Members'}
+                <span className="hidden sm:inline">{currentUser ? ` • Owner: ${currentUser.name}` : ''}</span>
+              </p>
             </div>
           </div>
 
-          {/* RIGHT: ONLY SEARCH, PROFILE & SIGN OUT */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* RIGHT: SEARCH, CLOUD SYNC, PROFILE & SIGN OUT (uniform icon buttons) */}
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             
             {/* Mobile Search Toggle Button */}
             <button
               onClick={() => setShowMobileSearch(!showMobileSearch)}
-              className={`md:hidden p-2 rounded-xl transition-all border shrink-0 ${
+              className={`md:hidden w-9 h-9 flex items-center justify-center rounded-xl transition-all border shrink-0 ${
                 showMobileSearch || searchQuery
                   ? 'bg-amber-900/60 text-[#fef08a] border-amber-500'
                   : 'bg-[#122319] hover:bg-[#1a3824] text-[#d4af37] border-[#40684c]'
@@ -195,6 +185,23 @@ export default function Navbar({
               title="Search members"
             >
               <Search className="w-4 h-4" />
+            </button>
+
+            {/* Cloud Sync Status (icon only) */}
+            <button
+              type="button"
+              onClick={onManualSync}
+              className={`relative w-9 h-9 flex items-center justify-center rounded-xl border shrink-0 transition-all cursor-pointer ${
+                cloudSyncStatus === 'error'
+                  ? 'bg-rose-950/60 border-rose-500/70 text-rose-300'
+                  : 'bg-[#0e2417] hover:bg-[#163824] border-emerald-600/50 hover:border-emerald-400 text-emerald-300'
+              }`}
+              title={cloudSyncStatus === 'syncing' ? 'Syncing to cloud...' : cloudSyncStatus === 'error' ? 'Sync failed - tap to retry' : 'Synced to cloud - tap to sync now'}
+            >
+              <Cloud className={`w-4 h-4 ${cloudSyncStatus === 'syncing' ? 'animate-pulse' : ''}`} />
+              <span className={`absolute top-1 right-1 w-2 h-2 rounded-full border border-[#0b140e] ${
+                cloudSyncStatus === 'syncing' ? 'bg-amber-400 animate-pulse' : cloudSyncStatus === 'error' ? 'bg-rose-500' : 'bg-emerald-400'
+              }`} />
             </button>
 
             {/* Desktop Search Input */}
@@ -225,7 +232,7 @@ export default function Navbar({
                 <div className="relative shrink-0">
                   <button
                     onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="flex items-center gap-1.5 p-1 rounded-xl bg-[#122319] hover:bg-[#1a3824] text-[#fce7a1] border border-[#40684c] transition-all hover:border-[#d4af37] shadow-sm cursor-pointer"
+                    className="flex items-center gap-1 h-9 px-1 rounded-xl bg-[#122319] hover:bg-[#1a3824] text-[#fce7a1] border border-[#40684c] transition-all hover:border-[#d4af37] shadow-sm cursor-pointer"
                     title={`Account: ${currentUser.name}`}
                   >
                     <div className="relative shrink-0">
@@ -405,10 +412,10 @@ export default function Navbar({
                 {/* SIGN OUT BUTTON */}
                 <button
                   onClick={onLogout}
-                  className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#4d0c12] to-[#2e070b] hover:from-[#6b121a] hover:to-[#4d0c12] border border-[#a82531]/80 hover:border-red-400 text-rose-200 hover:text-white text-xs font-serif-vintage font-bold shadow-md transition-all hover:scale-[1.03] shrink-0"
+                  className="flex items-center justify-center gap-1.5 w-9 h-9 sm:w-auto sm:px-3 rounded-xl bg-gradient-to-r from-[#4d0c12] to-[#2e070b] hover:from-[#6b121a] hover:to-[#4d0c12] border border-[#a82531]/80 hover:border-red-400 text-rose-200 hover:text-white text-xs font-serif-vintage font-bold shadow-md transition-all shrink-0"
                   title="Sign Out"
                 >
-                  <LogOut className="w-3.5 h-3.5 text-rose-400" />
+                  <LogOut className="w-4 h-4 text-rose-400" />
                   <span className="hidden sm:inline">Sign Out</span>
                 </button>
 
