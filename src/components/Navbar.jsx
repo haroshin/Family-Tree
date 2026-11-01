@@ -208,9 +208,6 @@ export default function Navbar({
                     aria-label="Open menu"
                   >
                     {showUserMenu ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-                    <span className={`absolute top-1 right-1 w-2 h-2 rounded-full border border-[#0b140e] ${
-                      cloudSyncStatus === 'syncing' ? 'bg-amber-400 animate-pulse' : cloudSyncStatus === 'error' ? 'bg-rose-500' : 'bg-emerald-400'
-                    }`} />
                   </button>
 
                   {/* Comprehensive User Menu */}
@@ -246,29 +243,13 @@ export default function Navbar({
                             {currentUser.authProvider === 'google' && <span className="text-[9px] text-amber-200 bg-[#163821] px-1 py-0.2 rounded border border-[#2a683e]">Google</span>}
                             <span>{currentUser.email}</span>
                           </p>
-                        </div>
-                      </div>
-
-                      {/* Cloud Sync to Mobile */}
-                      <div className="py-2 border-b border-[#2d4734] space-y-1">
-                        <button
-                          onClick={() => {
-                            setShowUserMenu(false);
-                            if (onManualSync) onManualSync();
-                          }}
-                          className="w-full text-left px-3 py-2 rounded-xl text-xs text-[#fef08a] bg-gradient-to-r from-[#143520] to-[#1c4b2d] hover:from-[#1b472b] hover:to-[#24613a] flex items-center gap-2.5 font-serif-vintage font-bold border border-emerald-500/60 shadow-xs transition-all cursor-pointer"
-                        >
-                          <Cloud className={`w-4 h-4 text-emerald-300 ${cloudSyncStatus === 'syncing' ? 'animate-pulse' : ''}`} />
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center justify-between">
-                              <span>Sync to Cloud (Mobile)</span>
-                              <span className="text-[9px] px-1.5 py-0.2 bg-emerald-900/80 text-emerald-200 rounded border border-emerald-600/40">
-                                {cloudSyncStatus === 'syncing' ? 'Syncing...' : 'Sync Now'}
-                              </span>
-                            </div>
-                            <p className="text-[10px] text-emerald-200/80 font-normal">Push laptop tree to mobile & other devices</p>
+                          <div className="flex items-center gap-1.5 mt-1.5">
+                            <span className="inline-flex items-center gap-1 text-[9px] text-emerald-300 font-sans bg-emerald-950/80 px-1.5 py-0.5 rounded-md border border-emerald-600/40">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                              {cloudSyncStatus === 'syncing' ? 'Saving to Cloud...' : 'Auto-Saved to Cloud'}
+                            </span>
                           </div>
-                        </button>
+                        </div>
                       </div>
 
                       {/* Tree Actions Section */}
