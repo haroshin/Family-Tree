@@ -4,11 +4,8 @@ const resolveApiBase = () => {
     const raw = import.meta.env.VITE_API_URL;
     return raw.endsWith('/') ? raw.slice(0, -1) : raw;
   }
-  // When running on remote production (e.g. Vercel), direct requests to the live Render backend
-  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-    return 'https://family-tree-6fit.onrender.com/api';
-  }
-  return '/api';
+  // Default directly to the live Render MongoDB API
+  return 'https://family-tree-6fit.onrender.com/api';
 };
 
 const API_BASE = resolveApiBase();

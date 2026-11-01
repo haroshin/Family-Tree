@@ -18,7 +18,8 @@ import {
   ChevronDown,
   Edit3,
   Check,
-  X
+  X,
+  Cloud
 } from 'lucide-react';
 
 export default function Navbar({
@@ -41,7 +42,9 @@ export default function Navbar({
   currentUser,
   onLogout,
   sideMap,
-  onUpdateTreeName
+  onUpdateTreeName,
+  onManualSync,
+  cloudSyncStatus = 'idle'
 }) {
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -165,10 +168,15 @@ export default function Navbar({
                 <p className="text-[10px] sm:text-[11px] text-[#c7aa60] font-serif-vintage truncate">
                   {membersCount} Members {currentUser ? `• Owner: ${currentUser.name}` : ''}
                 </p>
-                <span className="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-950/80 border border-emerald-600/40 text-emerald-300 text-[10px] font-sans" title="Connected to MongoDB Server">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  MongoDB
-                </span>
+                <button
+                  type="button"
+                  onClick={onManualSync}
+                  className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#0e2417] hover:bg-[#163824] border border-emerald-600/50 hover:border-emerald-400 text-emerald-300 text-[10px] font-sans transition-all cursor-pointer shadow-xs"
+                  title="Click to sync your family tree with MongoDB Cloud"
+                >
+                  <Cloud className={`w-3 h-3 text-emerald-400 ${cloudSyncStatus === 'syncing' ? 'animate-bounce' : ''}`} />
+                  <span>{cloudSyncStatus === 'syncing' ? 'Syncing...' : 'Cloud Synced'}</span>
+                </button>
               </div>
             </div>
           </div>
@@ -277,6 +285,28 @@ export default function Navbar({
                             <span>{currentUser.email}</span>
                           </p>
                         </div>
+                      </div>
+
+                      {/* Cloud Sync to Mobile */}
+                      <div className="py-2 border-b border-[#2d4734] space-y-1">
+                        <button
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            if (onManualSync) onManualSync();
+                          }}
+                          className="w-full text-left px-3 py-2 rounded-xl text-xs text-[#fef08a] bg-gradient-to-r from-[#143520] to-[#1c4b2d] hover:from-[#1b472b] hover:to-[#24613a] flex items-center gap-2.5 font-serif-vintage font-bold border border-emerald-500/60 shadow-xs transition-all cursor-pointer"
+                        >
+                          <Cloud className={`w-4 h-4 text-emerald-300 ${cloudSyncStatus === 'syncing' ? 'animate-pulse' : ''}`} />
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center justify-between">
+                              <span>Sync to Cloud (Mobile)</span>
+                              <span className="text-[9px] px-1.5 py-0.2 bg-emerald-900/80 text-emerald-200 rounded border border-emerald-600/40">
+                                {cloudSyncStatus === 'syncing' ? 'Syncing...' : 'Sync Now'}
+                              </span>
+                            </div>
+                            <p className="text-[10px] text-emerald-200/80 font-normal">Push laptop tree to mobile & other devices</p>
+                          </div>
+                        </button>
                       </div>
 
                       {/* Tree Actions Section */}

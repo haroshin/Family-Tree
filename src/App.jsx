@@ -79,20 +79,47 @@ export default function App() {
     relationType: null
   });
 
+  const [cloudSyncStatus, setCloudSyncStatus] = useState('idle'); // 'idle' | 'syncing' | 'synced' | 'error'
+
   // Fetch latest tree from MongoDB when user is active
   useEffect(() => {
     if (currentUser) {
+      setCloudSyncStatus('syncing');
       fetchTreeFromBackend().then((remoteTree) => {
-        if (remoteTree?.members && remoteTree.members.length > 0) {
-          setMembers(remoteTree.members);
-          saveUserTree(currentUser.id, remoteTree.members);
+        const localTree = getUserTree(currentUser.id);
+        const currentLocal = (localTree && localTree.length > 0) ? localTree : members;
+        const remoteMembers = remoteTree?.members || [];
+
+        // Protection 1: If current device (e.g. laptop) has a populated tree with > 1 member,
+        // but MongoDB Atlas has only empty/starter (<= 1 member), DO NOT overwrite local data!
+        // Instead, upload the laptop tree to MongoDB Atlas!
+        if (currentLocal && currentLocal.length > 1 && remoteMembers.length <= 1) {
+          console.log(`Preserving & pushing local family tree (${currentLocal.length} members) to MongoDB Atlas...`);
+          setMembers(currentLocal);
+          syncTreeToBackend(currentLocal, currentUser.treeName).then((res) => {
+            if (res?.success) setCloudSyncStatus('synced');
+          });
+        }
+        // Protection 2: If remote cloud tree has multiple members, apply to this device
+        else if (remoteMembers.length > 1) {
+          setMembers(remoteMembers);
+          saveUserTree(currentUser.id, remoteMembers);
+          setCloudSyncStatus('synced');
           if (remoteTree.treeName && remoteTree.treeName !== currentUser.treeName) {
             setCurrentUser(prev => prev ? { ...prev, treeName: remoteTree.treeName } : prev);
           }
-        } else if (members && members.length > 1) {
-          // If remote cloud tree is empty, push existing device members to MongoDB
-          syncTreeToBackend(members, currentUser.treeName);
         }
+        // Protection 3: Remote has 1 member, local has <= 1 member
+        else if (remoteMembers.length > 0) {
+          setMembers(remoteMembers);
+          saveUserTree(currentUser.id, remoteMembers);
+          setCloudSyncStatus('synced');
+        } else {
+          setCloudSyncStatus('synced');
+        }
+      }).catch((e) => {
+        console.warn('Backend fetch error:', e);
+        setCloudSyncStatus('idle');
       });
     }
   }, [currentUser?.id]);
@@ -102,7 +129,9 @@ export default function App() {
     if (currentUser) {
       saveUserTree(currentUser.id, members);
       const timer = setTimeout(() => {
-        syncTreeToBackend(members, currentUser.treeName);
+        syncTreeToBackend(members, currentUser.treeName).then((res) => {
+          if (res?.success) setCloudSyncStatus('synced');
+        });
       }, 600);
       return () => clearTimeout(timer);
     }
@@ -113,22 +142,54 @@ export default function App() {
     }
   }, [members, currentUser]);
 
+  // Handle Manual Sync to MongoDB
+  const handleManualSync = async () => {
+    if (!currentUser) return;
+    setCloudSyncStatus('syncing');
+    try {
+      const res = await syncTreeToBackend(members, currentUser.treeName);
+      if (res?.success) {
+        setCloudSyncStatus('synced');
+        alert(`✓ Cloud Sync Successful!\n\nAll ${members.length} members in "${currentUser.treeName || 'My Family Tree'}" have been safely backed up to MongoDB Atlas.\n\nNow when you log in on your phone with ${currentUser.email}, you will see your entire family tree!`);
+      } else {
+        setCloudSyncStatus('error');
+        alert(`Cloud sync status: ${res?.error || 'Unable to sync to cloud at this moment.'}`);
+      }
+    } catch (err) {
+      setCloudSyncStatus('error');
+      alert(`Sync failed: ${err.message}`);
+    }
+  };
+
   // Handle successful login or account registration
   const handleLoginSuccess = async (user) => {
     setCurrentUser(user);
 
     // Check if remote tree exists in MongoDB
     const remote = await fetchTreeFromBackend();
-    if (remote?.members && remote.members.length > 0) {
-      setMembers(remote.members);
-      saveUserTree(user.id, remote.members);
+    const userTree = getUserTree(user.id);
+    const remoteMembers = remote?.members || [];
+
+    // If local device already has a populated tree (> 1 member) and cloud only has starter (<= 1)
+    if (userTree && userTree.length > 1 && remoteMembers.length <= 1) {
+      setMembers(userTree);
+      await syncTreeToBackend(userTree, user.treeName);
+      setCloudSyncStatus('synced');
       return;
     }
 
-    const userTree = getUserTree(user.id);
-    if (userTree && userTree.length > 0) {
-      setMembers(userTree);
-      syncTreeToBackend(userTree, user.treeName);
+    if (remoteMembers.length > 0) {
+      setMembers(remoteMembers);
+      saveUserTree(user.id, remoteMembers);
+      setCloudSyncStatus('synced');
+      return;
+    }
+
+    const savedLocal = getUserTree(user.id);
+    if (savedLocal && savedLocal.length > 0) {
+      setMembers(savedLocal);
+      syncTreeToBackend(savedLocal, user.treeName);
+      setCloudSyncStatus('synced');
     } else {
       if (user.id === DEFAULT_DEMO_USER.id) {
         const demoTree = updateGenerations(INITIAL_FAMILY_TREE, 'me');
@@ -152,6 +213,7 @@ export default function App() {
         saveUserTree(user.id, updated);
         syncTreeToBackend(updated, user.treeName);
       }
+      setCloudSyncStatus('synced');
     }
   };
 
@@ -439,6 +501,8 @@ export default function App() {
         onLogout={handleLogout}
         sideMap={sideMap}
         onUpdateTreeName={handleUpdateTreeName}
+        onManualSync={handleManualSync}
+        cloudSyncStatus={cloudSyncStatus}
       />
 
       {/* Main Active View Container */}

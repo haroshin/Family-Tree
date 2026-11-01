@@ -305,20 +305,86 @@ export const saveUserTree = (userId, members) => {
   }
 };
 
+// Ensure active JWT token exists by auto-handshaking with the backend if needed
+export const ensureAuthToken = async (activeUser) => {
+  let token = getAuthToken();
+  if (token) return token;
+
+  const user = activeUser || getActiveUser();
+  if (!user || !user.email) return null;
+
+  try {
+    const res = await authApi.googleAuth({
+      email: user.email.toLowerCase().trim(),
+      name: user.name || user.email.split('@')[0],
+      photo: user.photo,
+      googleId: user.id
+    });
+    if (res?.token) {
+      setAuthToken(res.token);
+      return res.token;
+    }
+  } catch (err) {
+    console.warn('Auto-session handshake notice:', err.message);
+  }
+
+  // If local password exists, try login or register
+  if (user.password) {
+    try {
+      const res = await authApi.login(user.email, user.password);
+      if (res?.token) {
+        setAuthToken(res.token);
+        return res.token;
+      }
+    } catch {
+      try {
+        const res = await authApi.register({
+          name: user.name,
+          email: user.email,
+          password: user.password,
+          gender: user.gender,
+          birthYear: user.birthYear,
+          treeName: user.treeName,
+          photo: user.photo
+        });
+        if (res?.token) {
+          setAuthToken(res.token);
+          return res.token;
+        }
+      } catch (regErr) {
+        console.warn('Auto-register fallback notice:', regErr.message);
+      }
+    }
+  }
+
+  return null;
+};
+
 // MongoDB Sync Helpers
 export const syncTreeToBackend = async (members, treeName) => {
   try {
-    if (getAuthToken()) {
-      await treeApi.saveTree(members, treeName);
+    let token = getAuthToken();
+    if (!token) {
+      token = await ensureAuthToken();
     }
+    if (token && Array.isArray(members) && members.length > 0) {
+      const res = await treeApi.saveTree(members, treeName);
+      return { success: true, count: members.length, data: res };
+    }
+    return { success: false, error: 'Could not obtain active session token' };
   } catch (err) {
     console.warn('MongoDB sync notice:', err.message);
+    return { success: false, error: err.message };
   }
 };
 
 export const fetchTreeFromBackend = async () => {
   try {
-    if (getAuthToken()) {
+    let token = getAuthToken();
+    if (!token) {
+      token = await ensureAuthToken();
+    }
+    if (token) {
       const data = await treeApi.getTree();
       if (data?.members && Array.isArray(data.members) && data.members.length > 0) {
         return {
