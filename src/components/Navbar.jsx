@@ -432,8 +432,8 @@ export default function Navbar({
             </button>
           </nav>
 
-          {/* RIGHT: Family Side Lineage Filter Tabs */}
-          <div className="flex items-center bg-[#0d1c12] p-1 rounded-xl border border-[#26442f] text-xs font-serif-vintage shrink-0">
+          {/* RIGHT: Family Side Lineage Filter Tabs (Desktop only; on mobile rendered on canvas) */}
+          <div className="hidden md:flex items-center bg-[#0d1c12] p-1 rounded-xl border border-[#26442f] text-xs font-serif-vintage shrink-0">
             <button
               onClick={() => setSideFilter('all')}
               className={`px-3 py-1 rounded-lg font-bold transition-all whitespace-nowrap ${

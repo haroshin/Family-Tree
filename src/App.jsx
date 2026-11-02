@@ -555,6 +555,7 @@ export default function App() {
             onDeleteMember={handleDeleteMember}
             searchQuery={searchQuery}
             sideFilter={sideFilter}
+            onSelectSideFilter={setSideFilter}
             sideMap={sideMap}
             onOpenContextMenu={(menu) => setContextMenu(menu)}
             onResetFilter={() => setSideFilter('all')}
@@ -586,6 +587,7 @@ export default function App() {
             searchQuery={searchQuery}
             theme={theme}
             sideFilter={sideFilter}
+            onSelectSideFilter={setSideFilter}
             sideMap={sideMap}
             onOpenContextMenu={(menu) => setContextMenu(menu)}
           />

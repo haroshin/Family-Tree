@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { 
   Plus, 
   ZoomIn, 
@@ -30,6 +30,7 @@ export default function TreeCanvas({
   searchQuery,
   theme,
   sideFilter = 'all',
+  onSelectSideFilter,
   sideMap,
   onOpenContextMenu
 }) {
@@ -39,6 +40,18 @@ export default function TreeCanvas({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [collapsedNodes, setCollapsedNodes] = useState(new Set());
   const containerRef = useRef(null);
+
+  const { fCount, mCount } = useMemo(() => {
+    let f = 0;
+    let m = 0;
+    if (sideMap) {
+      sideMap.forEach((v) => {
+        if (v === 'father') f++;
+        if (v === 'mother') m++;
+      });
+    }
+    return { fCount: f, mCount: m };
+  }, [sideMap]);
 
   // Group members by generation
   // Generation 0: Me, Spouse, Siblings
@@ -240,6 +253,61 @@ export default function TreeCanvas({
         <div className="text-[10px] text-center font-mono text-[#fef08a] font-bold py-1 border-t border-[#24422e]">
           {Math.round(zoom * 100)}%
         </div>
+      </div>
+
+      {/* Mobile Top Side Filter Control (Red Border Area: Show All | Father's Side | Mother's Side) */}
+      <div
+        data-ui
+        className="absolute top-2 left-2 right-14 sm:right-16 z-30 md:hidden flex items-center bg-[#07130b]/95 backdrop-blur-md p-1 rounded-xl border border-[#7a5924]/70 shadow-[0_4px_25px_rgba(0,0,0,0.85)] font-serif-vintage gap-1"
+      >
+        <button
+          type="button"
+          onClick={() => onSelectSideFilter && onSelectSideFilter('all')}
+          className={`flex-1 py-1 px-1.5 rounded-lg text-center font-bold transition-all text-[11px] whitespace-nowrap min-h-[30px] flex items-center justify-center ${
+            sideFilter === 'all'
+              ? 'bg-gradient-to-r from-[#856322] to-[#594215] text-[#fff9db] shadow-md border border-[#d4af37]'
+              : 'text-[#d4af37]/75 hover:text-white hover:bg-[#14291c]'
+          }`}
+          title="Show all members"
+        >
+          Show All
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onSelectSideFilter && onSelectSideFilter('father')}
+          className={`flex-1 py-1 px-1 rounded-lg text-center font-bold transition-all text-[11px] flex items-center justify-center gap-1 whitespace-nowrap min-h-[30px] ${
+            sideFilter === 'father'
+              ? 'bg-gradient-to-r from-[#740001] to-[#4a0203] text-[#fef08a] shadow-md border border-[#d3a625]'
+              : 'text-[#e58b88] hover:text-white hover:bg-[#3d0f13]/60'
+          }`}
+          title="Filter by Father's Side"
+        >
+          <span>Father's Side</span>
+          {fCount > 0 && (
+            <span className="text-[9px] px-1 py-0.2 rounded-full bg-[#520001] text-[#fef08a] border border-[#d3a625]/60 font-bold leading-none">
+              {fCount}
+            </span>
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onSelectSideFilter && onSelectSideFilter('mother')}
+          className={`flex-1 py-1 px-1 rounded-lg text-center font-bold transition-all text-[11px] flex items-center justify-center gap-1 whitespace-nowrap min-h-[30px] ${
+            sideFilter === 'mother'
+              ? 'bg-gradient-to-r from-[#1a472a] to-[#0f2e1b] text-[#e2e8f0] shadow-md border border-[#2ecc71]'
+              : 'text-[#7ce4a8] hover:text-white hover:bg-[#13301e]/60'
+          }`}
+          title="Filter by Mother's Side"
+        >
+          <span>Mother's Side</span>
+          {mCount > 0 && (
+            <span className="text-[9px] px-1 py-0.2 rounded-full bg-[#0d2616] text-[#a7f3d0] border border-[#2ecc71]/60 font-bold leading-none">
+              {mCount}
+            </span>
+          )}
+        </button>
       </div>
 
       {/* Tree Header Legend Banner */}
