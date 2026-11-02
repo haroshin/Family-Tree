@@ -61,6 +61,7 @@ export default function VintageTreeCanvas({
 
   const layout = useMemo(() => computeTreeLayout(members, { showGhosts }), [members, showGhosts]);
   const art = useMemo(() => (layout ? buildTreeArt(layout) : null), [layout]);
+  const byId = useMemo(() => new Map(members.map((m) => [m.id, m])), [members]);
   const rootNode = layout?.nodes.find((n) => n.isRoot);
 
   const { fCount, mCount } = useMemo(() => {
