@@ -2,6 +2,7 @@
 
 // Calculate generation levels relative to 'me' node
 export const updateGenerations = (members, meId = 'me') => {
+  if (!Array.isArray(members) || members.length === 0) return [];
   const memberMap = new Map(members.map(m => [m.id, { ...m }]));
   const visited = new Set();
 
