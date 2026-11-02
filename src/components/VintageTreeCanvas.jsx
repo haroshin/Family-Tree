@@ -671,6 +671,39 @@ export default function VintageTreeCanvas({
                   const canAddMother = !info.hasMother && info.count < 2;
                   const popLeft = n.x > W / 2;
 
+                  // Choose the side for the hover card that hides the fewest other people
+                  let popStyle = null;
+                  if (hovered) {
+                    const PW = 272;
+                    const PH = 340;
+                    const ox = n.x - 75;
+                    const oy = n.y - 45;
+                    const candidates = [
+                      { key: popLeft ? 'left' : 'right', x: popLeft ? ox - PW - 12 : ox + 150 + 12, y: oy - 14 },
+                      { key: popLeft ? 'right' : 'left', x: popLeft ? ox + 150 + 12 : ox - PW - 12, y: oy - 14 },
+                      { key: 'above', x: ox + 75 - PW / 2, y: oy - PH - 12 },
+                      { key: 'below', x: ox + 75 - PW / 2, y: oy + 150 + 10 },
+                    ];
+                    let best = null;
+                    candidates.forEach((c, idx) => {
+                      let overlap = 0;
+                      layout.nodes.forEach((o) => {
+                        if (o.id === n.id) return;
+                        const bx = o.x - 75;
+                        const by = o.y - 45;
+                        const bw = 150;
+                        const bh = o.ghost ? 70 : 150;
+                        const w = Math.min(c.x + PW, bx + bw) - Math.max(c.x, bx);
+                        const h = Math.min(c.y + PH, by + bh) - Math.max(c.y, by);
+                        if (w > 0 && h > 0) overlap += w * h;
+                      });
+                      // small bias keeps the default side when overlaps tie
+                      const score = overlap + idx * 50 + (c.y < 0 ? 100000 : 0);
+                      if (!best || score < best.score) best = { c, score };
+                    });
+                    popStyle = { left: best.c.x - ox - 12, top: best.c.y - oy - 12, padding: 12 };
+                  }
+
                   return (
                     <div
                       key={n.id}
@@ -759,7 +792,7 @@ export default function VintageTreeCanvas({
 
                     {/* ---------------- hover details ---------------- */}
                     {hovered && (
-                      <div className={`absolute top-[-14px] ${popLeft ? 'right-full pr-3' : 'left-full pl-3'}`}>
+                      <div className="absolute" style={popStyle}>
                         <div className="w-68 rounded-2xl bg-[#0d1a12]/98 border-2 border-[#d4af37] shadow-[0_10px_40px_rgba(0,0,0,0.9)] p-4 text-[#fce7a1] cursor-default animate-in fade-in duration-150">
                           <div className="flex items-start gap-3 pb-3 border-b border-[#23422d]">
                             <Avatar photo={m.photo} name={m.name} gender={m.gender} className="w-12 h-12 rounded-xl border-2 border-[#d4af37] shadow" />
