@@ -563,40 +563,55 @@ export default function VintageTreeCanvas({
                       );
                     })}
 
-                    {/* Dual-Parent Joint Connectors for Children */}
+                    {/* Parent → Child Connectors (dual parents get a joint arch; single parents get a direct line) */}
                     {layout.nodes.map((n) => {
                       if (n.ghost || !n.member) return null;
                       const m = n.member;
-                      if (!m.fatherId || !m.motherId) return null;
-                      const fNode = layout.nodes.find((fn) => fn.member?.id === m.fatherId);
-                      const mNode = layout.nodes.find((mn) => mn.member?.id === m.motherId);
-                      if (!fNode || !mNode) return null;
+                      if (!m.fatherId && !m.motherId) return null;
+                      const fNode = m.fatherId ? layout.nodes.find((fn) => !fn.ghost && fn.member?.id === m.fatherId) : null;
+                      const mNode = m.motherId ? layout.nodes.find((mn) => !mn.ghost && mn.member?.id === m.motherId) : null;
+                      if (!fNode && !mNode) return null;
 
-                      const isRelevant = !hoveredId || n.id === hoveredId || fNode.id === hoveredId || mNode.id === hoveredId;
+                      const isRelevant = !hoveredId || n.id === hoveredId || fNode?.id === hoveredId || mNode?.id === hoveredId;
                       if (!showConnectors && !isRelevant) return null;
+                      const sw = isRelevant ? 3.5 : 1.5;
 
-                      const parentMidX = (fNode.x + mNode.x) / 2;
-                      const parentMidY = (fNode.y + mNode.y) / 2;
+                      if (fNode && mNode) {
+                        const parentMidX = (fNode.x + mNode.x) / 2;
+                        const parentMidY = (fNode.y + mNode.y) / 2;
+                        const archD = `M${fNode.x},${fNode.y + 35} Q${parentMidX},${parentMidY + 50} ${mNode.x},${mNode.y + 35}`;
+                        return (
+                          <g key={`dual-parent-${n.id}`} opacity={isRelevant ? 1 : 0.25} strokeLinecap="round">
+                            <path d={archD} stroke="#000" strokeOpacity="0.6" strokeWidth={sw + 3} fill="none" />
+                            <line x1={parentMidX} y1={parentMidY + 42} x2={n.x} y2={n.y - 35} stroke="#000" strokeOpacity="0.6" strokeWidth={sw + 3} />
+                            <path d={archD} stroke="#fde047" strokeWidth={sw} strokeDasharray="5 3" fill="none" />
+                            <line x1={parentMidX} y1={parentMidY + 42} x2={n.x} y2={n.y - 35} stroke="#fde047" strokeWidth={sw} />
+                          </g>
+                        );
+                      }
 
+                      const p = fNode || mNode;
+                      const color = fNode ? '#60a5fa' : '#f472b6';
                       return (
-                        <g key={`dual-parent-${n.id}`} opacity={isRelevant ? 1 : 0.25}>
-                          {/* Arch connecting both parents */}
-                          <path
-                            d={`M${fNode.x},${fNode.y + 35} Q${parentMidX},${parentMidY + 50} ${mNode.x},${mNode.y + 35}`}
-                            stroke="#d4af37"
-                            strokeWidth={isRelevant ? "2.5" : "1.5"}
-                            strokeDasharray="4 2"
-                            fill="none"
-                          />
-                          {/* Stem from parents down to child */}
-                          <line
-                            x1={parentMidX}
-                            y1={parentMidY + 42}
-                            x2={n.x}
-                            y2={n.y - 35}
-                            stroke="#d4af37"
-                            strokeWidth={isRelevant ? "2.5" : "1.5"}
-                          />
+                        <g key={`single-parent-${n.id}`} opacity={isRelevant ? 1 : 0.25} strokeLinecap="round">
+                          <line x1={p.x} y1={p.y + 35} x2={n.x} y2={n.y - 35} stroke="#000" strokeOpacity="0.6" strokeWidth={sw + 3} />
+                          <line x1={p.x} y1={p.y + 35} x2={n.x} y2={n.y - 35} stroke={color} strokeWidth={sw} />
+                        </g>
+                      );
+                    })}
+
+                    {/* Sibling Connectors */}
+                    {siblingPairs.map(({ id, node1, node2 }) => {
+                      const isRelevant = !hoveredId || node1.id === hoveredId || node2.id === hoveredId;
+                      if (!showConnectors && !isRelevant) return null;
+                      const mx = (node1.x + node2.x) / 2;
+                      const my = (node1.y + node2.y) / 2;
+                      return (
+                        <g key={`sibling-link-${id}`} opacity={isRelevant ? 1 : 0.25} strokeLinecap="round">
+                          <line x1={node1.x} y1={node1.y} x2={node2.x} y2={node2.y} stroke="#000" strokeOpacity="0.6" strokeWidth={isRelevant ? 6.5 : 4.5} />
+                          <line x1={node1.x} y1={node1.y} x2={node2.x} y2={node2.y} stroke="#34d399" strokeWidth={isRelevant ? 3.5 : 1.5} strokeDasharray="6 4" />
+                          <rect x={mx - 30} y={my - 10} width="60" height="20" rx="10" fill="#0f2e1b" stroke="#34d399" strokeWidth="1.5" />
+                          <text x={mx} y={my + 3} fill="#a7f3d0" fontSize="10" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Sibling</text>
                         </g>
                       );
                     })}
