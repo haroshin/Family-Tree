@@ -17,7 +17,7 @@ import {
   AlertCircle,
   Users
 } from 'lucide-react';
-import { loginUser, registerUser, getStoredUsers, loginOrRegisterWithGoogle } from '../utils/authUtils';
+import { loginUser, registerUser, getStoredUsers, loginOrRegisterWithGoogle, DEFAULT_DEMO_USER } from '../utils/authUtils';
 import { AVATAR_PRESETS } from '../data/avatars';
 import GoogleOAuthButton from './GoogleOAuthButton';
 
@@ -110,18 +110,25 @@ export default function AuthPage({ onLoginSuccess }) {
   }, []);
 
   const handleQuickSwitchUser = async (user) => {
-    if (user.authProvider === 'google') {
-      onLoginSuccess(user);
+    setError('');
+    if (user.id === DEFAULT_DEMO_USER.id) {
+      try {
+        const logged = await loginUser(DEFAULT_DEMO_USER.email, 'password123');
+        onLoginSuccess(logged);
+      } catch (err) {
+        setError(err.message || 'Could not open demo tree.');
+      }
       return;
     }
-    setLoginEmail(user.email);
-    setLoginPassword(user.password || 'password123');
-    try {
-      const logged = await loginUser(user.email, user.password || 'password123');
-      onLoginSuccess(logged);
-    } catch (err) {
-      setError(`Please enter the password for ${user.name}`);
-      setMode('login');
+
+    // For real user accounts, require explicit authentication (never bypass login)
+    setMode('login');
+    setLoginEmail(user.email || '');
+    setLoginPassword('');
+    if (user.authProvider === 'google') {
+      setError(`Please click "Continue with Google" to sign in securely as ${user.name}.`);
+    } else {
+      setError(`Please enter the password for ${user.name} (${user.email}).`);
     }
   };
 

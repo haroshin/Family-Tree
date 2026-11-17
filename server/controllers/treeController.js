@@ -32,6 +32,7 @@ export const getTree = async (req, res) => {
     }
 
     res.json({
+      userId: req.user._id.toString(),
       treeName: tree.name,
       members: tree.members
     });
